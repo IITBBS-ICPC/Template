@@ -26,10 +26,6 @@ int gcd(int a, int b, int& x, int& y) {
     return a1;
 }
 
-template<int b>
-class complex{
-
-};
 template<int p>
 class helper{
     private:
@@ -63,6 +59,29 @@ class helper{
             }
             if(res.F==1)res.F = p - res.F;
             return res.F;
+        }
+};
+
+template<int p>
+class complex{
+    private:
+        int x,y;
+    public:
+        int base;
+        complex(int base,int x=0,int y=0):x(x),y(y){}
+        complex& operator*=(complex &other){
+            int temp = helper<p>::normalise(other.y*1ll*y);
+            y = helper<p>::normalise((other.y*1ll*x)+(other.x*1ll*y));
+            x = helper<p>::normalise((other.x*1ll*x)+(base*1ll*temp));
+        }
+        static complex pow(complex a,int po){
+            complex res(a.base,1);
+            while(po>>1){
+                if(po&1)res*=a;
+                po>>=1;
+                a*=a;
+            }
+            return res;
         }
 };
 
