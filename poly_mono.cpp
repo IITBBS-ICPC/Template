@@ -141,6 +141,59 @@ class Ntt{
 template<int max_base,int mod,int omega> const vector<__uint64_t> Ntt<max_base,mod,omega>::omegas = init_omegas();
 template<int max_base,int mod,int omega> const vector<__uint64_t> Ntt<max_base,mod,omega>::iomegas = init_iomegas();
 
+const int mod = 998244353;
+const int base = 1<<20;
+const int primitive = 3;
+vector<int>& operator *= (vector<int>& a,const vector<int> &b){
+    if(a.empty()||b.empty())a.clear();
+    else a = Ntt<base,mod,primitive>::mul(a,b);
+    return a;
+}
+vector<int> operator * (const vector<int>& a,const vector<int> &b){vector<int> c = a;return c*=b;}
+vector<int>& operator /= (vector<int>& a,const vector<int> &b){
+    if(a.size()<b.size())a.clear();
+    else{
+        vector<int> d = b;
+        reverse(d.begin(),d.end());
+        reverse(a.begin(),a.end());
+        int deg = a.size()-b.size();
+        a.resize(deg+1);
+        d.resize(deg+1);
+        d = Ntt<base,mod,primitive>::inv(d);
+        a*=d;
+        a.resize(deg+1);
+        reverse(a.begin(),a.end());
+    }
+    return a;
+}
+vector<int> operator / (vector<int>& a,const vector<int> &b){vector<int> c = a;return c/=b;}
+vector<int>& operator += (vector<int>& a,const vector<int> &b){
+    if(a.size()<b.size())a.resize(b.size());
+    for(int i=0;i<b.size();++i){
+        a[i]+=b[i];
+        if(a[i]>=mod)a[i]-=mod;
+    }
+    return a;
+}
+vector<int> operator + (const vector<int>& a,const vector<int> &b){vector<int> c = a;return c+=b;}
+vector<int>& operator -= (vector<int>& a,const vector<int> &b){
+    if(a.size()<b.size())a.resize(b.size());
+    for(int i=0;i<b.size();++i){
+        a[i]-=b[i];
+        if(a[i]<0)a[i]+=mod;
+    }
+    return a;
+}
+vector<int> operator - (const vector<int>& a,const vector<int> &b){vector<int> c = a;return c-=b;}
+vector<int>& operator %= (vector<int>& a,const vector<int> &b){
+    if(a.size()<b.size())return a;
+    vector<int> c = (a/b)*b;
+    a -= c;
+    a.resize(b.size()-1);
+    return a;
+}
+vector<int> operator % (const vector<int>& a,const vector<int> &b){vector<int> c = a;return c%=b;}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -149,7 +202,7 @@ int main()
     cin>>n>>m;
     vector<int> a(n),b(m);
     cin>>a>>b;
-    a=Ntt<1<<20,998244353,3>::mul(a,b);
+    a*=b;
     cout<<a;
 	return 0;
 }
