@@ -1,18 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-const int MaxN = 501;
-const int MaxM = MaxN * (MaxN - 1);
+namespace edmond {
 
-// global array mate is used to get matching.
-int mate[MaxN];
-
-struct edmond_graph {
-
+    const int MaxN = 501;
+    const int MaxM = MaxN * (MaxN - 1);
+    
     int n, m;
     int nE, adj[MaxN];
     int nxt[MaxM], go[MaxM];
     int n_matches;
+    int mate[MaxN];
 
     int q_n;
     int q[MaxN];
@@ -95,17 +93,14 @@ struct edmond_graph {
 };
 
 int main() {
-    freopen("input.txt","r",stdin);
-    freopen("output.txt","w",stdout);
-    edmond_graph g;
-    cin >> g.n >> g.m;
-    while(g.m--) {
+    cin >> edmond::n >> edmond::m;
+    while(edmond::m--) {
         int x,y; cin >> x >> y;
-        g.addEdge(x, y); // Input should be strictly 1-based indexed node.
+        edmond::addEdge(x, y); // Input should be strictly 1-based indexed node.
     }
-    g.calc_max_match();
-    cout << g.n_matches << endl;
-    for(int u = 1;u <= g.n; ++u)
-        if(mate[u] > u) cout << mate[u] << ' ' << u << '\n';
+    edmond::calc_max_match();
+    cout << edmond::n_matches << endl;
+    for(int u = 1;u <= edmond::n; ++u)
+        if(edmond::mate[u] > u) cout << edmond::mate[u] << ' ' << u << '\n';
     return 0;
 }
