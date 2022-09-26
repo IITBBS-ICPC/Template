@@ -18,30 +18,30 @@ using ll = long long;
 using vi = vector<int>;
 using pii = pair<int, int>;
 
-template <typename T>
-istream &operator>>(istream &in, vector<T> &a) {
-    for (auto &x : a) in >> x;
-    return in;
-}
-template <typename T, typename S>
-istream &operator>>(istream &in, pair<T, S> &x) {
+template <typename T, typename K>
+istream &operator>>(istream &in, pair<T, K> &x) {
     in >> x.F >> x.S;
     return in;
 }
+template <typename T, typename K>
+ostream &operator<<(ostream &out, pair<T, K> &x) {
+    out << x.F << " " << x.S;
+    return out;
+}
 
+template <typename T>
+istream &operator>>(istream &in, vector<T> &a) {
+    for (T &x : a) in >> x;
+    return in;
+}
 template <typename T>
 ostream &operator<<(ostream &out, vector<T> &a) {
     bool first = true;
-    for (const auto &x : a) {
-        if (!first) out << ' ';
+    for (T &x : a) {
+        if (!first) out << " ";
         first = false;
         out << x;
     }
-    return out;
-}
-template <typename T, typename S>
-ostream &operator<<(ostream &out, pair<T, S> &x) {
-    out << x.F << ' ' << x.S;
     return out;
 }
 
