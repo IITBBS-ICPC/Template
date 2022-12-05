@@ -1,25 +1,25 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-namespace edmond {
+struct edmond {
 
-    const int MaxN = 501;
-    const int MaxM = MaxN * (MaxN - 1);
     
-    int n, m;
-    int nE, adj[MaxN];
-    int nxt[MaxM], go[MaxM];
-    int n_matches;
-    int mate[MaxN];
+    int n, m , nE, n_matches,q_n,book_mark;
+    vector<int> adj,nxt,go,mate,q,book,type,fa,bel;
 
-    int q_n;
-    int q[MaxN];
-    int book_mark;
-    int book[MaxN];
-
-    int type[MaxN];
-    int fa[MaxN];
-    int bel[MaxN];
+    edmond(int n,int m):n(n),m(m){
+        nE=0;
+        n_matches=0;
+        adj.resize(n+1);
+        mate.resize(n+1);
+        q.resize(n+1);
+        book.resize(n+1);
+        type.resize(n+1);
+        fa.resize(n+1);
+        bel.resize(n+1);
+        go.resize((m<<1)|1);
+        nxt.resize((m<<1)|1);
+    }
 
     void addEdge(const int &u, const int &v) {
         nxt[++nE] = adj[u], go[adj[u] = nE] = v;
@@ -93,14 +93,16 @@ namespace edmond {
 };
 
 int main() {
-    cin >> edmond::n >> edmond::m;
-    while(edmond::m--) {
+    int n,m;
+    cin >> n >> m; 
+    edmond er(n, m);
+    while(m--) {
         int x,y; cin >> x >> y;
-        edmond::addEdge(x, y); // Input should be strictly 1-based indexed node.
+        er.addEdge(x+1, y+1); // Input should be strictly 1-based indexed node.
     }
-    edmond::calc_max_match();
-    cout << edmond::n_matches << endl;
-    for(int u = 1;u <= edmond::n; ++u)
-        if(edmond::mate[u] > u) cout << edmond::mate[u] << ' ' << u << '\n';
+    er.calc_max_match();
+    cout << er.n_matches << endl;
+    for(int u = 1;u <= er.n; ++u)
+        if(er.mate[u] > u) cout << er.mate[u]-1 << ' ' << u-1 << '\n';
     return 0;
 }
