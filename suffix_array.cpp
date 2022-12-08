@@ -52,3 +52,20 @@ vector<int> suffix_array(string s){
     }
     return p; 
 }
+
+
+vector<int> lcp_array(vector<int> &p,vector<int> &c,string s){
+    int n = p.size();
+    vector<int> lcp(n-1);
+    int k=0;
+    for(int i=0;i<n-1;++i){
+        int pi = c[i];
+        int j = p[pi-1];
+        //lcp[i] = lcp[s[i...],s[j...]]
+        while(s[i+k] == s[j+k]) ++k;
+        lcp[pi-1] = k;  
+        k = max(k-1,0);
+    }
+    return lcp;
+}
+// Finds lcp using p and c array defined in suffix array
