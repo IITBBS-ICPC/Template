@@ -27,6 +27,20 @@ double area(const vector<pt> &poly) {
     return area ;
 }
 
+double area(const vector<pt> &poly) {
+    int n = static_cast<int>(poly.size());
+    double area = 0; 
+    for(int i=0;i<n;++i) {
+       /*  pt p = i ? poly[i-1] : poly.back(), q = poly[i];
+         area += (p.x - q.x) * (p.y - q.y) ; */
+        // Use above formula for simple polygon
+        area += poly[i].x * (poly[(i+1)%n].y - poly[(i+n-1)%n].y);
+    }
+    area = fabs(area)/2;
+    return area ;
+}
+
+
 int orientation(pt a, pt b, pt c) {
     double v = a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y);
     if (v < 0) return -1; // clockwise
