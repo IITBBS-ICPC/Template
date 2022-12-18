@@ -89,9 +89,10 @@ vector<int> mul(vector<int> &f, vector<int> &g) {
   vector<int> h(n+m+1);
   for (int i = 0; i <= n + m; i++)
     h[i] = (num(a[i].real()) + num(a[i].imag()) * mm * mm + (num(b[i].real()) + num(b[i].imag())) * mm) % mod;
+  for (int i = 0; i != up; i++)a[i] = b[i] = c[i] = d[i] = 0;
   return h;
 }
-} // namespace poly
+} // namespace poly please call poly::init() and set o,len,mod accordingly
 
 int main() {
   ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
