@@ -1,6 +1,6 @@
-const int P1 = 880803841;//(105*2^23)+1
-const int P2 = 897581057;//(107*2^23)+1
-const int P3 = 998244353;//(119*2^23)+1
+const int P1 = 880803841, G1 = 26;//(105*2^23)+1
+const int P2 = 897581057, G2 = 3;//(107*2^23)+1
+const int P3 = 998244353, G3 = 3;//(119*2^23)+1
 template<int mod>
 constexpr int powmod(int a,int p = mod -2){
     int res = 1;
@@ -180,16 +180,3 @@ vector<int>& operator %= (vector<int>& a,const vector<int> &b){
     return a;
 }
 vector<int> operator % (const vector<int>& a,const vector<int> &b){vector<int> c = a;return c%=b;}
-
-int main()
-{
-	ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    int n,m;
-    cin>>n>>m;
-    vector<int> a(n),b(m);
-    cin>>a>>b;
-    a*=b;
-    cout<<a;
-	return 0;
-}
