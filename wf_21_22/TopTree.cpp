@@ -1,43 +1,42 @@
 // should have identity transform
 struct Transform{
     long long val;
-    Transform():
-        val(0ll){}
-    Transform(long long _val):
-        val(_val){}
-    inline void reset(){
-        val = 0;
-    }
+    Transform():val(0ll){}
+    Transform(long long _val):val(_val){}
     Transform& operator +=(Transform &other){
         val+=other.val;
         return *this;
     }
+    bool isLazy()const{return val;}
 };
 // transforming values and summing = summing and transforming
 // sum is commutative and associative
+// transforming identity = identity
 struct Val{
     int n;
     long long val;
     Val(int _n, long long _val):n(_n),val(_val){}
     Val(long long _val):n(1),val(_val){}
     Val():n(0),val(0){}
-    void apply(Transform &T){val+=(n*T.val);}
     Val operator +(Val &other)const{
         return Val(n+other.n, val+other.val);};
+    Val& operator +=(Transform &T){val+=(n*T.val);return *this;}
+    bool isIdentity()const{return n==0;}
 };
+
 template<typename val, typename transform>
 class TopTree{
 public:
     struct Splay{
         struct node{
             int l,r,ar,p;
-            bool flip, lazy;
+            bool flip;
             val self, path, sub, all;
             transform lazyPath, lazySub;
             node():
-                l(0),r(0),ar(0),p(0),flip(false),lazy(false){}
+                l(0),r(0),ar(0),p(0),flip(false){}
             node(int _val):
-                l(0),r(0),ar(0),p(0),flip(false),lazy(false),
+                l(0),r(0),ar(0),p(0),flip(false),
                 self(_val), path(_val), all(_val){}
         };
         int stx;
@@ -50,40 +49,44 @@ public:
             stx = n;
         }
         inline void lazyApplyPath(int u, transform &T){
-            if(nodes[u].path.n)nodes[u].lazyPath+=T,nodes[u].lazy = true;
+            if(!nodes[u].path.isIdentity()){
+                nodes[u].self+=T,nodes[u].path+=T,
+                nodes[u].lazyPath+=T;
+                nodes[u].all = nodes[u].path+nodes[u].sub;
+            }
         }
         inline void lazyApplySub(int u, transform &T){
-            if(nodes[u].sub.n)nodes[u].lazySub+=T,nodes[u].lazy = true;
+            if(!nodes[u].sub.isIdentity()){
+                nodes[u].sub+=T,nodes[u].lazySub+=T;
+                nodes[u].all = nodes[u].path+nodes[u].sub;
+            }
+        }
+        inline void flip(int u){
+            swap(nodes[u].l,nodes[u].r);
+            nodes[u].flip^=1;
         }
         inline void push(int u){
-            if(!nodes[u].lazy)return;
-            
-            nodes[u].self.apply(nodes[u].lazyPath),
-            nodes[u].path.apply(nodes[u].lazyPath),
-            lazyApplyPath(nodes[u].l, nodes[u].lazyPath),
-            lazyApplyPath(nodes[u].r, nodes[u].lazyPath),
-            nodes[u].sub.apply(nodes[u].lazySub),
-            lazyApplySub(nodes[u].l, nodes[u].lazySub),
-            lazyApplySub(nodes[u].r, nodes[u].lazySub),
-            lazyApplySub(nodes[u].ar, nodes[u].lazySub),
-            lazyApplyPath(nodes[u].ar, nodes[u].lazySub);
-            
-            nodes[u].all = nodes[u].path+nodes[u].sub;
-            if(nodes[u].flip){
-                nodes[nodes[u].l].flip^=1;
-                nodes[nodes[u].r].flip^=1;
-                swap(nodes[u].l, nodes[u].r);
-                nodes[u].flip = 0;
+            if(nodes[u].lazyPath.isLazy()){
+                lazyApplyPath(nodes[u].l, nodes[u].lazyPath),
+                lazyApplyPath(nodes[u].r, nodes[u].lazyPath);
+                nodes[u].lazyPath = transform();
             }
-            
-            nodes[u].lazy = false;
-            nodes[u].lazyPath.reset();
-            nodes[u].lazySub.reset();
+            if(nodes[u].lazySub.isLazy()){
+                lazyApplySub(nodes[u].l, nodes[u].lazySub),
+                lazyApplySub(nodes[u].r, nodes[u].lazySub),
+                lazyApplySub(nodes[u].ar, nodes[u].lazySub),
+                lazyApplyPath(nodes[u].ar, nodes[u].lazySub);
+                nodes[u].lazySub = transform();
+            }
+            if(nodes[u].flip){
+                nodes[u].flip = false;
+                flip(nodes[u].l);
+                flip(nodes[u].r);
+            }
         }
         inline void pull(int u){
             if(!u)return;
             int lc = nodes[u].l, rc = nodes[u].r, ar = nodes[u].ar;
-            push(lc);push(rc);push(ar);
             nodes[u].path = nodes[lc].path+nodes[u].self+nodes[rc].path;
             nodes[u].sub = nodes[lc].sub+nodes[rc].sub+nodes[ar].all;
             nodes[u].all = nodes[u].path+nodes[u].sub;
@@ -132,30 +135,31 @@ public:
             }
             push(x);
         }
+        inline void detach(int u){
+            push(u);
+            if(nodes[u].r){
+                if(nodes[nodes[u].ar].ar||(!nodes[u].ar)){
+                    nodes[++stx].r = nodes[u].ar;
+                    nodes[stx].p = u;
+                    if(nodes[stx].r)
+                        nodes[nodes[stx].r].p = stx;
+                    nodes[u].ar = stx;
+                }
+                else
+                    push(nodes[u].ar);
+                nodes[nodes[u].ar].ar = nodes[u].r;
+                nodes[nodes[u].r].p = nodes[u].ar;
+                nodes[u].r = 0;
+                pull(nodes[u].ar);
+                pull(u);
+            }
+        }
         inline int access(int u){
             int x = u;
             int v = u;
             while(x){
                 splay(x);
-                if(u==x){
-                    if(nodes[u].r){
-                        if(nodes[nodes[u].ar].ar||(!nodes[u].ar)){
-                            nodes[++stx].r = nodes[u].ar;
-                            nodes[stx].p = u;
-                            if(nodes[stx].r)
-                                nodes[nodes[stx].r].p = stx;
-                            nodes[u].ar = stx;
-                        }
-                        else
-                            push(nodes[u].ar);
-                        nodes[nodes[u].ar].ar = nodes[u].r;
-                        nodes[nodes[u].r].p = nodes[u].ar;
-                        nodes[u].r = 0;
-                        pull(nodes[u].ar);
-                        pull(u);
-                    }
-                }
-                else{
+                if(u!=x){
                     push(nodes[x].ar);
                     swap(nodes[x].r,nodes[nodes[x].ar].ar);
                     if(nodes[x].r)
@@ -165,6 +169,8 @@ public:
                     pull(nodes[x].ar);
                     pull(x);
                 }
+                else 
+                    detach(x);
                 v = x;
                 x = nodes[x].p;
                 if(x){
@@ -176,14 +182,12 @@ public:
             return v;
         }
         void root(int x){
-            access(x);
-            nodes[x].flip = nodes[x].lazy = true;
-            push(x);
+            access(x);flip(x);push(x);
         }
     };
     Splay S;
     int root;
-    TopTree(int _n, int _q,int _root):S(_n,_q*4),root(_root){}
+    TopTree(int _n, int _q,int _root):S(_n,_q*2),root(_root){}
     void updateSub(int x,transform T){
         S.root(root);S.access(x);
         int y = S.nodes[x].l;
@@ -202,7 +206,7 @@ public:
     }
     val getSub(int x){
         S.root(root);S.access(x);
-        return S.nodes[x].self+S.nodes[S.nodes[x].ar].all;
+        return S.nodes[x].self+S.nodes[S.nodes[x].r].path+S.nodes[S.nodes[x].ar].all;
     }
     void link(int x,int y){
         S.root(x);S.access(y);
