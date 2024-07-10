@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define mk make_pair
+
 using i32 = int32_t;
 using i64 = int64_t;
 using i128 = __int128_t;
