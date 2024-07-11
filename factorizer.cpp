@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define mp make_pair
+
 using i32 = int32_t;
 using i64 = int64_t;
 using i128 = __int128_t;
@@ -156,8 +158,8 @@ template <typename T>
 vector<pair<T, int>> RhoC(T n, T c) {
     if (n <= 1) return {};
     if (!(n & 1))
-        return MergeFactors({mk(static_cast<T>(2), 1)}, RhoC(n >> 1, c));
-    if (IsPrime(n)) return {mk(n, 1)};
+        return MergeFactors({mp(static_cast<T>(2), 1)}, RhoC(n >> 1, c));
+    if (IsPrime(n)) return {mp(n, 1)};
     T g = brent(n, static_cast<T>(2), c);
     return MergeFactors(RhoC(g, c + 1), RhoC(n / g, c + 1));
 }
