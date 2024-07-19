@@ -1,5 +1,6 @@
 class EulerianCircuit{
     int n,e;
+    
     vector<vector<int>> adj;
     vector<bool> visit;
     vector<int> edges;
