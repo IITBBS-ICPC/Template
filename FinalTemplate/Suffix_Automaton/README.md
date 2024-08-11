@@ -5,6 +5,5 @@
 ## Testing
 
 <ul>
-<li><a href="https://judge.yosupo.jp/submission/227362">Yosupo</a></li>
-<li><a href="https://codeforces.com/group/fkQQ5I8JeS/contest/538618/submission/273373937">CodeForces</a></li>
+<li><a href="https://cses.fi/paste/89c9bd1a052eb3659af826/">CSES</a></li>
 </ul>
