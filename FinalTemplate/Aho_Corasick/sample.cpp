@@ -3,7 +3,7 @@ using namespace std;
 
 #include "template.h"
 
-// Based on CF problem , submission link is in README.md
+// Based on CF problem "x-prime Substrings" , submission link is in README.md
 
 const int INF = 1e9 + 5;
 const int K = 10; // For digits 0-9

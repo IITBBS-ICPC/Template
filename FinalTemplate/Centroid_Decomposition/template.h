@@ -1,3 +1,4 @@
+const int N=200005; // Change based on constraint
 set<int> G[N]; // adjacency list (note that this is stored in set, not vector)
 int sz[N], pa[N];
 
