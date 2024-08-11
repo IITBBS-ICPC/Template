@@ -88,13 +88,13 @@ int main() {
         }
     }
 
-    vector<int> circuit = ec.eulerCircuit();
+    vector<int> circuit = ec.eulerCircuit(0);
     if (circuit.size() != m + 1) { 
         // Check if all edges are covered
         cout << "IMPOSSIBLE" << endl;
     } else {
         for (int i : circuit) {
-            cout << i << " ";
+            cout << (i+1) << " ";
         }
         cout << endl;
     }
