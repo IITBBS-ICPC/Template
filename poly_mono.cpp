@@ -53,13 +53,15 @@ class Ntt{
     static const u32 mod_inv = init_mod_inv(), 
         mod32 = mod;
     static const u64 mod64 = mod;
+ public:
+    // use to combine if using fft explicitly
+    // see mul for details
     static const inline u32 reduce(u64 x){
         u32 m = static_cast<u32>(x)*mod_inv;
         u32 t = (x+m*mod64)>>32;
         if(t>=mod)t-=mod;
         return t;
     }
- public:
     static void fft(vi &a){
         int n = a.size();
         for(int m=n>>1;m;m>>=1){
