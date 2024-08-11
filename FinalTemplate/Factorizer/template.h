@@ -1,12 +1,7 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 #define mp make_pair
-
 using i32 = int32_t;
 using i64 = int64_t;
 using i128 = __int128_t;
-
 namespace factorizer {
 constexpr i128 mult(i128 a, i128 b, i128 mod) {
     i128 ans = 0;
@@ -169,4 +164,4 @@ vector<pair<T, int>> Factorize(T n) {
     if (n <= 1) return {};
     return RhoC(n, static_cast<T>(1));
 }
-}  // namespace factorizer
+}  // example factorizer::Factorize(35)
