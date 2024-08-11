@@ -17,7 +17,7 @@ vector<int> dmst(const vector<E> &e, int n, int root) {
   vector<PQ> h(n * 2);
   for (int i = 0; i < int(e.size()); ++i)
     h[e[i].t].push({e[i].w, i});
-  vector<int> a(n * 2); iota(iter(a), 0);
+  vector<int> a(n * 2); iota(all(a), 0);
   vector<int> v(n * 2, -1), pa(n * 2, -1), r(n * 2);
   auto o = [&](auto Y, int x) -> int {
     return x==a[x] ? x : a[x] = Y(Y, a[x]); };
