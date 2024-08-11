@@ -1,6 +1,3 @@
-#include<bits/stdc++.h>
-using namespace std;
-
 struct edmond {
     int n, m , nE, n_matches,q_n,book_mark;
     vector<int> adj,nxt,go,mate,q,book,type,fa,bel;
@@ -90,17 +87,17 @@ struct edmond {
     }
 };
 
-int main() {
-    int n,m;
-    cin >> n >> m; 
-    edmond er(n, m);
-    while(m--) {
-        int x,y; cin >> x >> y;
-        er.addEdge(x+1, y+1); // Input should be strictly 1-based indexed node.
-    }
-    er.calc_max_match();
-    cout << er.n_matches << endl;
-    for(int u = 1;u <= er.n; ++u)
-        if(er.mate[u] > u) cout << er.mate[u]-1 << ' ' << u-1 << '\n';
-    return 0;
-}
+// int main() {
+//     int n,m;
+//     cin >> n >> m; 
+//     edmond er(n, m);
+//     while(m--) {
+//         int x,y; cin >> x >> y;
+//         er.addEdge(x+1, y+1); // Input should be strictly 1-based indexed node.
+//     }
+//     er.calc_max_match();
+//     cout << er.n_matches << endl;
+//     for(int u = 1;u <= er.n; ++u)
+//         if(er.mate[u] > u) cout << er.mate[u]-1 << ' ' << u-1 << '\n';
+//     return 0;
+// }
