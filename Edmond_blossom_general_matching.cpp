@@ -2,8 +2,6 @@
 using namespace std;
 
 struct edmond {
-
-    
     int n, m , nE, n_matches,q_n,book_mark;
     vector<int> adj,nxt,go,mate,q,book,type,fa,bel;
 
