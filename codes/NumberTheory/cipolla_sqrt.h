@@ -18,6 +18,7 @@ class cipolla_sqrt{
         if(x>=p){
             x-=p;if(x>=p)x%=p;return x;
         }
+        return x;
     }
     static int get(int x){
         int a = 0,b;
