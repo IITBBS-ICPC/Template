@@ -5,6 +5,8 @@ typedef long long ll;
 // Implementation of Dinic's blocking algorithm for the maximum flow.
 // Complexity: V²E (faster on real graphs).
 
+// please add edges not related to input first to improve constants
+
 // This class accepts a graph (costructed calling AddEdge) and then solves
 // the maximum flow problem for any source and sink. Both directed and
 // undirected graphs are supported. In case of undirected graphs, each edge
