@@ -52,3 +52,4 @@ It assumes basic codes and knowledge upto a 2100 cf rated is present with the me
 - Each sample soluton should contain problem link in code itself
 - Each sample solution should use head path with path name from repo main file, see existing samples for details
 - It is advisable to copy paste from implementation than including header file in case it helps improving readibility of code
+- [TODO:arihant](lint setup with column wrap of 56)
