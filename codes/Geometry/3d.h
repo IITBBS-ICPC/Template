@@ -124,14 +124,19 @@ ld getPointSegmDist(Point A, Point P, Point Q) {
 }
 //
 ld getSegmDist(Point A, Point B, Point C, Point D) {
-	ld res = min(min(getPointSegmDist(A, C, D), getPointSegmDist(B, C, D)),
-				min(getPointSegmDist(C, A, B), getPointSegmDist(D, A, B)));
+	ld res = min(
+		min(getPointSegmDist(A, C, D),
+			getPointSegmDist(B, C, D)),
+		min(getPointSegmDist(C, A, B),
+			getPointSegmDist(D, A, B)));
 	Point n = (B - A) * (D - C);
 	if (eq(n.len(), 0)) return res;
 	n = n.norm();
 	Point I1, I2;
-	if (!intersectLinePlane(A, B - A, C, (D - C) * n, I1)) throw;
-	if (!intersectLinePlane(C, D - C, A, (B - A) * n, I2)) throw;
+	if (!intersectLinePlane(A, B - A, C,
+		(D - C) * n, I1)) throw;
+	if (!intersectLinePlane(C, D - C, A, 
+		(B - A) * n, I2)) throw;
 	if (!onSegm(A, I1, B)) return res;
 	if (!onSegm(C, I2, D)) return res;
 	return min(res, (I1 - I2).len());
