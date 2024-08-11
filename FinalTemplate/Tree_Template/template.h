@@ -33,7 +33,7 @@ typedef vector<pll> vpl;
 #define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
 #define trav(a,x) for (auto& a : x)
 
-mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 ll powmod(ll a,ll b) {ll res=1; assert(b>=0); for(;b;b>>=1){if(b&1)res=res*a;a=a*a;}return res;}
 ll gcd(ll a,ll b) { return b?gcd(b,a%b):a;}
