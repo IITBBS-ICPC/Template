@@ -1,15 +1,15 @@
 void muland(vector<int> &a, int inv) {
     int n = a.size();
-    for(int len = 1; 2*len <= n; len <<= 1) {
-        for(int i=0;i<n;i+=2*len) {
-            for(int j=0;j<len;++j) {
+    for(int len=2,hlen=1;len<=n;hlen<<=1,len<<=1) {
+        for(int i=0;i<n;i+=len) {
+            for(int j=0;j<hlen;++j) {
                 int str = a[i+j];
                 if(!inv) {
-                    a[i+j] = a[i+j+len];
-                    a[i+j+len] += str;
+                    a[i+j] = a[i+j+hlen];
+                    a[i+j+hlen] = a[i+j+hlen]+str;
                 } else {
-                    a[i+j] = -str+a[i+j+len];
-                    a[i+j+len] = str;
+                    a[i+j] = -str+a[i+j+hlen];
+                    a[i+j+hlen] = str;
                 }
             }
         }
@@ -19,31 +19,32 @@ void muland(vector<int> &a, int inv) {
 
 void mulor(vector<int> &a, int inv) {
     int n = a.size();
-    for(int len = 2; len <= n; len <<= 1) {
+    for(int len=2,hlen=1;len<=n;hlen<<=1,len<<=1) {
         for(int i=0;i<n;i+=len) {
-            for(int j=0;j<len/2;++j) {
+            for(int j=0;j<hlen;++j) {
                 int str = a[i+j];
                 if(!inv) {
-                    a[i+j] += a[i+j+len/2];
-                    a[i+j + len/2] = str;   
+                    a[i+j] += a[i+j+hlen];
+                    a[i+j+hlen] = str;   
                 } else {
-                    a[i+j] = a[i+j+len/2];
-                    a[i+j + len/2] = str 
-                        - a[i+j+len/2];  
+                    a[i+j] = a[i+j+hlen];
+                    a[i+j+hlen] = str-a[i+j+hlen];  
                 }
             }
         }
     }
 }
 
+// f[j] = sum_{0}^{n} a[i]*(-1^(bc(i&j)))
+// where bc is bitcount
 void mulxor(vector<int> &a, int inv) {
     int n = a.size();
-    for(int len = 2; len <= n; len <<= 1) {
+    for(int len=2,hlen=1;len<=n;hlen<<=1,len<<=1) {
         for(int i=0;i<n;i+=len) {
-            for(int j=0;j<len/2;++j) {
+            for(int j=0;j<hlen;++j) {
                 int str = a[i+j];
-                a[i+j] = a[i+j] + a[i+j+len/2];
-                a[i+j + len/2] = str - a[i+j+len/2]; 
+                a[i+j] = a[i+j] + a[i+j+hlen];
+                a[i+j+hlen] = str - a[i+j+hlen]; 
             }
         }
     }
