@@ -1,12 +1,6 @@
-// Based on CSES Mail Delivery problem
-// Problem: https://cses.fi/problemset/task/1691
- 
-#include <bits/stdc++.h>
-using namespace std;
- 
 class EulerianCircuit{
     int n,e;
- 
+
     vector<vector<int>> adj;
     vector<bool> visit;
     vector<int> edges;
@@ -63,41 +57,3 @@ public:
         return eulerCircuit(findFirst());
     }
 };
- 
-int main() {
-    int n, m;
-    cin >> n >> m;
- 
-    EulerianCircuit ec(n);
-    vector<int> degree(n, 0);
- 
-    for (int i = 0; i < m; ++i) {
-        int a, b;
-        cin >> a >> b;
-        a--; b--; // Convert to 0-based index
-        ec.addEdge(a, b);
-        degree[a]++;
-        degree[b]++;
-    }
- 
-    // Check for Eulerian Circuit conditions
-    for (int i = 0; i < n; ++i) {
-        if (degree[i] % 2 != 0) {
-            cout << "IMPOSSIBLE" << endl;
-            return 0;
-        }
-    }
- 
-    vector<int> circuit = ec.eulerCircuit(0);
-    if (circuit.size() != m + 1) { 
-        // Check if all edges are covered
-        cout << "IMPOSSIBLE" << endl;
-    } else {
-        for (int i : circuit) {
-            cout << (i+1) << " ";
-        }
-        cout << endl;
-    }
- 
-    return 0;
-}
