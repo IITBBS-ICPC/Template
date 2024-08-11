@@ -1,5 +1,4 @@
-const static int K = 26;
-
+const static int K = 26; // Will change if input is not just lowercase alphabets
 struct Vertex {
     int next[K];
     int leaf = 0;// It actually denotes number of leafs reachable from current vertexes using links.
@@ -29,6 +28,9 @@ void add_s(string const& s) {
     t[v].leaf += 1;
 }
 
+// Forward declaration of functions
+int go(int v, char ch);
+
 // gets the link from vertex v.
 int get_link(int v) {
     if (t[v].link == -1) {
@@ -41,7 +43,7 @@ int get_link(int v) {
 }
 
 int go(int v, char ch) {
-    int c = ch - 'a';
+    int c = ch - 'a'; // May change if not lowercase alphabet
     if (t[v].go[c] == -1) {
         if (t[v].next[c] != -1)
             t[v].go[c] = t[v].next[c];
