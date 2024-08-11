@@ -12,15 +12,15 @@ public:
     EulerianCircuit(int _n):n(_n),e(0){
         adj.resize(n);
         for(int i=0;i<n;++i)
-            adj[i].pb(0);
+            adj[i].push_back(0);
         edges.resize(2);
         visit.resize(2);
     }
     void addEdge(int u,int v){
         ++e;
-        adj[u].pb(e<<1);
+        adj[u].push_back(e<<1);
         edges.push_back(v);
-        adj[v].pb((e<<1)|1);
+        adj[v].push_back((e<<1)|1);
         edges.push_back(u);
         visit.push_back(false);
         visit.push_back(false);
