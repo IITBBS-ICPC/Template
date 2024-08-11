@@ -1,68 +1,57 @@
-const static int K = 26;
+// Taken from cp-algotithms
 
-struct Vertex {
-    int next[K];
-    int leaf = 0;// It actually denotes number of leafs reachable from current vertexes using links.
-    int p = -1;
-    char pch;
-    int link = -1;
-    int go[K];      
+vector<int> parent, depth, heavy, head, pos;
+int cur_pos;
 
-    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
-        fill(begin(next), end(next), -1);
-        fill(begin(go), end(go), -1);
-    }
-};
-vector<Vertex> t;   // Automation is stored in form of vector. 
-
-// Add String s to the automaton.
-void add_s(string const& s) {
-    int v = 0;
-    for (char ch : s) {
-        int c = ch - 'a';
-        if (t[v].next[c] == -1) {
-            t[v].next[c] = t.size();
-            t.emplace_back(v, ch);
-        }
-        v = t[v].next[c];
-    }
-    t[v].leaf += 1;
-}
-
-// gets the link from vertex v.
-int get_link(int v) {
-    if (t[v].link == -1) {
-        if (v == 0 || t[v].p == 0)
-            t[v].link = 0;
-        else
-            t[v].link = go(get_link(t[v].p), t[v].pch);
-    }
-    return t[v].link;
-}
-
-int go(int v, char ch) {
-    int c = ch - 'a';
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
-    }
-    return t[v].go[c];
-} 
-
-// To calculate links and leafs (exit link) for all nodes.
-void bfs() {
-    queue<int> order;
-    order.push(0);
-    while(!order.empty()) {
-        int cur = order.front(); order.pop();
-        t[cur].link = get_link(cur);
-        t[cur].leaf += t[t[cur].link].leaf;
-        for(int i=0;i<K;++i) {
-            if(t[cur].next[i] != -1) {
-                order.push(t[cur].next[i]);
-            }
+int dfs(int v, vector<vector<int>> const& adj) {
+    int size = 1;
+    int max_c_size = 0;
+    for (int c : adj[v]) {
+        if (c != parent[v]) {
+            parent[c] = v, depth[c] = depth[v] + 1;
+            int c_size = dfs(c, adj);
+            size += c_size;
+            if (c_size > max_c_size)
+                max_c_size = c_size, heavy[v] = c;
         }
     }
+    return size;
+}
+
+int query(int a, int b) {
+    int res = 0;
+    for (; head[a] != head[b]; b = parent[head[b]]) {
+        if (depth[head[a]] > depth[head[b]])
+            swap(a, b);
+        int cur_heavy_path_max = segment_tree_query(pos[head[b]], pos[b]);
+        res = max(res, cur_heavy_path_max);
+    }
+    if (depth[a] > depth[b])
+        swap(a, b);
+    int last_heavy_path_max = segment_tree_query(pos[a], pos[b]);
+    res = max(res, last_heavy_path_max);
+    return res;
+}
+
+void decompose(int v, int h, vector<vector<int>> const& adj) {
+    head[v] = h, pos[v] = cur_pos++;        // Now v is present at pos[v]
+    if (heavy[v] != -1)
+        decompose(heavy[v], h, adj);
+    for (int c : adj[v]) {
+        if (c != parent[v] && c != heavy[v])
+            decompose(c, c, adj);
+    }
+}
+
+void init(vector<vector<int>> const& adj) {
+    int n = adj.size();
+    parent = vector<int>(n);
+    depth = vector<int>(n);
+    heavy = vector<int>(n, -1);
+    head = vector<int>(n);
+    pos = vector<int>(n);
+    cur_pos = 0;
+
+    dfs(0, adj);
+    decompose(0, 0, adj);
 }

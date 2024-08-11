@@ -1,68 +1,67 @@
-const static int K = 26;
-
-struct Vertex {
-    int next[K];
-    int leaf = 0;// It actually denotes number of leafs reachable from current vertexes using links.
-    int p = -1;
-    char pch;
-    int link = -1;
-    int go[K];      
-
-    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
-        fill(begin(next), end(next), -1);
-        fill(begin(go), end(go), -1);
-    }
-};
-vector<Vertex> t;   // Automation is stored in form of vector. 
-
-// Add String s to the automaton.
-void add_s(string const& s) {
-    int v = 0;
-    for (char ch : s) {
-        int c = ch - 'a';
-        if (t[v].next[c] == -1) {
-            t[v].next[c] = t.size();
-            t.emplace_back(v, ch);
-        }
-        v = t[v].next[c];
-    }
-    t[v].leaf += 1;
-}
-
-// gets the link from vertex v.
-int get_link(int v) {
-    if (t[v].link == -1) {
-        if (v == 0 || t[v].p == 0)
-            t[v].link = 0;
-        else
-            t[v].link = go(get_link(t[v].p), t[v].pch);
-    }
-    return t[v].link;
-}
-
-int go(int v, char ch) {
-    int c = ch - 'a';
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
-    }
-    return t[v].go[c];
-} 
-
-// To calculate links and leafs (exit link) for all nodes.
-void bfs() {
-    queue<int> order;
-    order.push(0);
-    while(!order.empty()) {
-        int cur = order.front(); order.pop();
-        t[cur].link = get_link(cur);
-        t[cur].leaf += t[t[cur].link].leaf;
-        for(int i=0;i<K;++i) {
-            if(t[cur].next[i] != -1) {
-                order.push(t[cur].next[i]);
+void muland(vector<int> &a, int inv) {
+    int n = a.size();
+    for(int len = 1; 2*len <= n; len <<= 1) {
+        for(int i=0;i<n;i+=2*len) {
+            for(int j=0;j<len;++j) {
+                int str = a[i+j];
+                if(!inv) {
+                    a[i+j] = a[i+j+len];
+                    a[i+j+len] += str;
+                } else {
+                    a[i+j] = -str+a[i+j+len];
+                    a[i+j+len] = str;
+                }
             }
         }
     }
+}
+
+
+void mulor(vector<int> &a, int inv) {
+    int n = a.size();
+    for(int len = 2; len <= n; len <<= 1) {
+        for(int i=0;i<n;i+=len) {
+            for(int j=0;j<len/2;++j) {
+                int str = a[i+j];
+                if(!inv) {
+                    a[i+j] += a[i+j+len/2];
+                    a[i+j + len/2] = str;   
+                } else {
+                    a[i+j] = a[i+j+len/2];
+                    a[i+j + len/2] = str - a[i+j+len/2];  
+                }
+            }
+        }
+    }
+}
+
+void mulxor(vector<int> &a, int inv) {
+    int n = a.size();
+    for(int len = 2; len <= n; len <<= 1) {
+        for(int i=0;i<n;i+=len) {
+            for(int j=0;j<len/2;++j) {
+                int str = a[i+j];
+                a[i+j] = a[i+j] + a[i+j+len/2];
+                a[i+j + len/2] = str - a[i+j+len/2]; 
+            }
+        }
+    }
+    if(inv) for(int i=0;i<n;++i) a[i]/=n;
+}
+
+vector<int> Multiand(vector<int> &a, vector<int> &b) {
+    int n = max(b.size(), a.size());
+    int i=1;
+    while(n > i) {
+        i*=2;
+    } n = i;
+    while(a.size()!=n) a.pb(0);
+    while(b.size()!=n) b.pb(0);
+    
+	muland(a,0); muland(b,0);
+	vector<int> ans;
+	for(int i=0;i<a.size();++i) 
+	   ans.pb(a[i]*b[i]);
+	muland(ans,1);
+	return ans;
 }

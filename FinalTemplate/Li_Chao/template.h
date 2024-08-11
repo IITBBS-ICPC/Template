@@ -1,68 +1,40 @@
-const static int K = 26;
+// Important : Here range l,r denotes [l,r). With this a bug is avoided which is if we take [l,r] then when both l and r are negative the update [l,mid] can result in infinite 
+//             recursion. E.g: l = -7, r = -6. mid = (l+r)/2 = -6 so [l,mid] = [-7,-6], resulting in infinite recursion.
 
-struct Vertex {
-    int next[K];
-    int leaf = 0;// It actually denotes number of leafs reachable from current vertexes using links.
-    int p = -1;
-    char pch;
-    int link = -1;
-    int go[K];      
+const int N = 1000000;
+struct line{
+    ll m,c;
+    ll operator()(ll x) { return m*x + c; }
+}Lichao[5*N];
 
-    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
-        fill(begin(next), end(next), -1);
-        fill(begin(go), end(go), -1);
-    }
-};
-vector<Vertex> t;   // Automation is stored in form of vector. 
-
-// Add String s to the automaton.
-void add_s(string const& s) {
-    int v = 0;
-    for (char ch : s) {
-        int c = ch - 'a';
-        if (t[v].next[c] == -1) {
-            t[v].next[c] = t.size();
-            t.emplace_back(v, ch);
-        }
-        v = t[v].next[c];
-    }
-    t[v].leaf += 1;
+void init() {
+    // Use default case m such that no input line contains that.
+    for(int i=0;i<5*N;++i) Lichao[i].m = -1;
 }
 
-// gets the link from vertex v.
-int get_link(int v) {
-    if (t[v].link == -1) {
-        if (v == 0 || t[v].p == 0)
-            t[v].link = 0;
-        else
-            t[v].link = go(get_link(t[v].p), t[v].pch);
+void insert(int v,int l, int r,line cur) {
+    if(Lichao[v].m == -1) {  // No line in this region
+        Lichao[v] = cur;
+        return ;
     }
-    return t[v].link;
+    if(l+1==r) {
+        if(Lichao[v](l) < cur(l)) Lichao[v] = cur;
+        return ;
+    }
+    int mid = (l+r)/2; 
+    if(Lichao[v].m > cur.m) swap(Lichao[v] , cur);
+    if(cur(mid) > Lichao[v](mid)) {
+        swap(Lichao[v] , cur);
+        insert(v<<1, l, mid, cur);
+    } else
+        insert((v<<1)|1, mid, r, cur);
 }
 
-int go(int v, char ch) {
-    int c = ch - 'a';
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
-    }
-    return t[v].go[c];
-} 
 
-// To calculate links and leafs (exit link) for all nodes.
-void bfs() {
-    queue<int> order;
-    order.push(0);
-    while(!order.empty()) {
-        int cur = order.front(); order.pop();
-        t[cur].link = get_link(cur);
-        t[cur].leaf += t[t[cur].link].leaf;
-        for(int i=0;i<K;++i) {
-            if(t[cur].next[i] != -1) {
-                order.push(t[cur].next[i]);
-            }
-        }
-    }
+ll query(int v, int l,int r, int pt) {       // Finding maximum value of function at x = pt
+    if(Lichao[v].m == -1) return -1e18;      // No line in this region
+    if(l+1==r) return Lichao[v](pt);
+    int mid = (l+r)/2;
+    if(pt <= mid) return max(Lichao[v](pt), query(v<<1, l, mid, pt));
+    else if(pt > mid) return max(Lichao[v](pt), query((v<<1)|1, mid, r, pt));
 }

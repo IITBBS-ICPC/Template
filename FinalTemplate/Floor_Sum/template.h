@@ -1,68 +1,10 @@
-const static int K = 26;
-
-struct Vertex {
-    int next[K];
-    int leaf = 0;// It actually denotes number of leafs reachable from current vertexes using links.
-    int p = -1;
-    char pch;
-    int link = -1;
-    int go[K];      
-
-    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
-        fill(begin(next), end(next), -1);
-        fill(begin(go), end(go), -1);
-    }
-};
-vector<Vertex> t;   // Automation is stored in form of vector. 
-
-// Add String s to the automaton.
-void add_s(string const& s) {
-    int v = 0;
-    for (char ch : s) {
-        int c = ch - 'a';
-        if (t[v].next[c] == -1) {
-            t[v].next[c] = t.size();
-            t.emplace_back(v, ch);
-        }
-        v = t[v].next[c];
-    }
-    t[v].leaf += 1;
-}
-
-// gets the link from vertex v.
-int get_link(int v) {
-    if (t[v].link == -1) {
-        if (v == 0 || t[v].p == 0)
-            t[v].link = 0;
-        else
-            t[v].link = go(get_link(t[v].p), t[v].pch);
-    }
-    return t[v].link;
-}
-
-int go(int v, char ch) {
-    int c = ch - 'a';
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
-    }
-    return t[v].go[c];
-} 
-
-// To calculate links and leafs (exit link) for all nodes.
-void bfs() {
-    queue<int> order;
-    order.push(0);
-    while(!order.empty()) {
-        int cur = order.front(); order.pop();
-        t[cur].link = get_link(cur);
-        t[cur].leaf += t[t[cur].link].leaf;
-        for(int i=0;i<K;++i) {
-            if(t[cur].next[i] != -1) {
-                order.push(t[cur].next[i]);
-            }
-        }
-    }
+// f(a,b,c,n) = Σ ( (a*x + b)/c ) from x=0 to n in 
+//O(logn) where value is floor of the value.
+ long long FloorSumAP(long long a, long long b, 
+  long long c, long long n){
+  if(!a) return (b / c) * (n + 1);
+  if(a >= c or b >= c) return ( ( n * (n + 1) ) / 2) * (a / c) 
+  + (n + 1) * (b / c) + FloorSumAP(a % c, b % c, c, n);
+  long long m = (a * n + b) / c;
+  return m * n - FloorSumAP(c, c - b - 1, a, m - 1);
 }

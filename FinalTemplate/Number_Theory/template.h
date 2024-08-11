@@ -1,68 +1,73 @@
-const static int K = 26;
-
-struct Vertex {
-    int next[K];
-    int leaf = 0;// It actually denotes number of leafs reachable from current vertexes using links.
-    int p = -1;
-    char pch;
-    int link = -1;
-    int go[K];      
-
-    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
-        fill(begin(next), end(next), -1);
-        fill(begin(go), end(go), -1);
-    }
-};
-vector<Vertex> t;   // Automation is stored in form of vector. 
-
-// Add String s to the automaton.
-void add_s(string const& s) {
-    int v = 0;
-    for (char ch : s) {
-        int c = ch - 'a';
-        if (t[v].next[c] == -1) {
-            t[v].next[c] = t.size();
-            t.emplace_back(v, ch);
+template<int p>
+class helper{
+    private:
+        static int const phim = p-2;
+        static int const phi = p-1;
+        static int const phihalf = phi>>1;
+        static int const phalf = (p+1)>>1;
+    public:
+        static int pow(int a,int po=phim){
+            int res = 1;for(;po;po>>=1,a=normalise(a*1ll*a))
+            if(po&1)res=normalise(a*1ll*res);return res;}
+        static int normalise(ll x){
+            if(x>=p)x-=p;if(x>=p)x%=p;return x;
         }
-        v = t[v].next[c];
-    }
-    t[v].leaf += 1;
-}
-
-// gets the link from vertex v.
-int get_link(int v) {
-    if (t[v].link == -1) {
-        if (v == 0 || t[v].p == 0)
-            t[v].link = 0;
-        else
-            t[v].link = go(get_link(t[v].p), t[v].pch);
-    }
-    return t[v].link;
-}
-
-int go(int v, char ch) {
-    int c = ch - 'a';
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
-    }
-    return t[v].go[c];
-} 
-
-// To calculate links and leafs (exit link) for all nodes.
-void bfs() {
-    queue<int> order;
-    order.push(0);
-    while(!order.empty()) {
-        int cur = order.front(); order.pop();
-        t[cur].link = get_link(cur);
-        t[cur].leaf += t[t[cur].link].leaf;
-        for(int i=0;i<K;++i) {
-            if(t[cur].next[i] != -1) {
-                order.push(t[cur].next[i]);
+        static int cipollasqrt(int x){
+            int a = 0,b;
+            while(pow(b = normalise(a*1ll*a-x+p), phihalf)==1)++a;
+            int po = phalf;
+            pair<int,int> v = {a,1};
+            pair<int,int> res = {1,1};
+            while(po){
+                if(po&1){
+                    int temp = normalise(res.S*1ll*v.S);
+                    res.S = normalise((v.F*1ll*res.S)+(res.F*1ll*v.S));
+                    res.F = normalise((v.F*1ll*res.F)+(b*1ll*temp));
+                }
+                po>>=1;
+                int temp = normalise(v.S*1ll*v.S);
+                v.S = normalise((v.F*1ll*v.S)+(v.F*1ll*v.S));
+                v.F = normalise((v.F*1ll*v.F)+(b*1ll*temp));
             }
+            if(res.F==1)res.F = p - res.F;
+            return res.F;
         }
+};
+
+template<int mod>
+class Montgomery{
+private:
+        __uint32_t val;
+public:
+    constexpr static __uint32_t find2inv(){
+        __uint32_t inv = mod;
+        for(int i=0;i<4;++i)inv *=(2-inv*mod);
+        return -inv;
     }
+    static const __uint32_t N2 = find2inv(mod);
+    static const __uint64_t modR = mod;
+    constexpr static const __uint32_t Rmod = (1ll<<32)%mod;
+    constexpr static const __uint32_t R2mod = (Rmod*1ll*Rmod) %mod;
+    static __uint32_t mul(__uint64_t t){
+        t = (t+(modR*(__uint32(t)*N2)))>>32;if(t>=mod)t-=mod;return t;}
+    Montgomery(int val):val(mul(val*1ll*R2mod)){}
+    Montgomery& operator += (const Montgomery& other){
+        val+=other.val;if(val>=mod)val-=mod;return *this;}
+    Montgomery& operator -= (const Montgomery& other){
+        val+=(mod-other.val);if(val>=mod)val-=mod;return *this;}
+    Montgomery& operator *= (const Montgomery& other){
+        val = mul(val*1ll*other.val);return *this;}
+    int get(){return mul(val);}
+};
+
+int gcd(int a, int b, int& x, int& y) {
+    x = 1, y = 0;
+    int x1 = 0, y1 = 1, a1 = a, b1 = b;
+    while (b1) {
+        int q = a1 / b1;
+        tie(x, x1) = make_tuple(x1, x - q * x1);
+        tie(y, y1) = make_tuple(y1, y - q * y1);
+        tie(a1, b1) = make_tuple(b1, a1 - q * b1);
+    }
+    return a1;
 }
