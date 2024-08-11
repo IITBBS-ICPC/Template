@@ -1,6 +1,9 @@
 // Time Complexity: O(nlogn)
 
-void count_sort(vector<int> &p,vector<int> &c){  // Sorts values in p by keys in c i.e, if c[p[i]] < c[p[j]] then i appears before j in p.
+void count_sort(vector<int> &p,vector<int> &c){  
+    // Sorts values in p by keys in c i.e, 
+    // if c[p[i]] < c[p[j]] then 
+    // i appears before j in p.
     int n = p.size();
     vector<int> cnt(n);
     for(auto x : c) cnt[x]++;
@@ -15,11 +18,15 @@ void count_sort(vector<int> &p,vector<int> &c){  // Sorts values in p by keys in
     p = p_new;
 }
 
-// Returns sorted suffix_array of size (n+1) with first element = n (empty suffix).
+// Returns sorted suffix_array of size (n+1) 
+// with first element = n (empty suffix).
+// '$' should be less than all character in string
 vector<int> suffix_array(string s){
     s += '$';
     int n = s.size();
-    vector<int> p(n),c(n); // p stores suffix array and c stroes its equivalence class
+    vector<int> p(n),c(n); 
+    // p stores suffix array and 
+    // c stroes its equivalence class
     {
         // k = 0 phase
         vector<pair<char,int>> a(n);
@@ -34,8 +41,13 @@ vector<int> suffix_array(string s){
     }
     int k=0;
     while((1<<k) < n ){ // k -> k + 1
-        // We require to sort p by {c[i], c[i+(1<<k)]} value. So we use radix sort: Sort the second element of pair then count sort first element in a stable fashion.
-        // Sort by second element: p[i] -= (1<<k). As p[i]'s are already sorted by c[i] values.
+    // We require to sort by {c[i],c[i+(1<<k)]value. 
+    // So we use radix sort: Sort the 
+    // second element of pair then count sort first 
+    // element in a stable fashion.
+
+        // Sort by second element: p[i] -= (1<<k). 
+        // As p[i]'s are already sorted by c[i] values.
         for(int i = 0; i < n ; ++i) p[i] = (p[i] - (1<<k) + n )%n;
         count_sort(p,c);
         
