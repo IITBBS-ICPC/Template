@@ -1,5 +1,4 @@
-// Not a problem submission
-// Just a basic test example
+// Yosupo Submission Link : https://judge.yosupo.jp/submission/227362
 
 #include<bits/stdc++.h>
 using namespace std;
@@ -27,18 +26,13 @@ int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    string s="aaaaa";
+    string s;
+    cin>>s;
     manacher(s);
 
-    for(int i=0;i<s.size();i++){
-        cout<<d[i][0]<<" ";
+    for(int i=0;i<s.size()-1;i++){
+        cout<<2*d[i][0]+1<<" "<<2*d[i+1][1]<<" ";
     }
 
-    cout<<"\n";
-
-    for(int i=0;i<s.size();i++){
-        cout<<d[i][1]<<" ";
-    }
-
-    cout<<"\n";
+    cout<<2*d[s.size()-1][0]+1<<"\n";
 }
