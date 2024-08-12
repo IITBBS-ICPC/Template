@@ -1,4 +1,5 @@
-// Yosupo Submission Link : https://judge.yosupo.jp/submission/227480
+// Yosupo Problem Link : https://judge.yosupo.jp/problem/factorize
+// Submission Link : https://judge.yosupo.jp/submission/227480
 
 #include<bits/stdc++.h>
 using namespace std;
