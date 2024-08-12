@@ -1,4 +1,5 @@
-// https://judge.yosupo.jp/problem/bitwise_and_convolution
+// Yosupo Problem Link : https://judge.yosupo.jp/problem/bitwise_and_convolution
+// Submission Link : https://judge.yosupo.jp/submission/227640
 
 // using not property of or and (demorgan) to verify
 

@@ -1,4 +1,5 @@
-// https://judge.yosupo.jp/problem/bitwise_xor_convolution
+// Yosupo Problem Link : https://judge.yosupo.jp/problem/bitwise_xor_convolution
+// Submission Link : https://judge.yosupo.jp/submission/227588
 
 #pragma GCC optimize("Ofast")
 #pragma GCC target("avx,avx2,fma")
