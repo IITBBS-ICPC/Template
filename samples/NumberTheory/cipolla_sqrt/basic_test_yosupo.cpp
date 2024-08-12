@@ -1,4 +1,5 @@
-// https://judge.yosupo.jp/problem/sqrt_mod
+// Yosupo Problem Link : https://judge.yosupo.jp/problem/sqrt_mod
+// Submission Link : https://judge.yosupo.jp/submission/227516
 
 #pragma GCC optimize("Ofast")
 #pragma GCC target("avx,avx2,fma")
