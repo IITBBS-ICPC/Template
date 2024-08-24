@@ -43,7 +43,7 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("--code", default="../codes")
   parser.add_argument("--head", default="head.tex.part")
-  parser.add_argument("--theory", default=None)
+  parser.add_argument("--theory", default="theory.tex.part")
   parser.add_argument("--tail", default="tail.tex.part")
   args = parser.parse_args()
   main(args)

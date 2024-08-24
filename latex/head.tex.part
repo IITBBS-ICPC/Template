@@ -6,6 +6,10 @@
 \usepackage{verbatim}
 \usepackage{geometry}
 \usepackage{fancyhdr}
+\usepackage{amsmath}
+
+\newcommand*{\Perm}[2]{{}^{#1}\!P_{#2}}%
+\newcommand*{\Comb}[2]{{}^{#1}C_{#2}}%
 
 %team name
 \title{{\Huge Three Musketeers}\\\vspace{5em}{\Large IIT Bhubaneswar}}

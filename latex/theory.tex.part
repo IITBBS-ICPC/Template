@@ -1,0 +1,32 @@
+\section{Theory}
+\subsection{Taylor function approximation}
+    \[ y_{n+1} = y_n+[{A(x)-g(y)}/g’(y_n)] \]
+\subsection{Pentagonal Theorem}
+    \begin{align*}
+        \prod _{n=1}^{\infty }\left(1-x^{n}\right) 
+            &= \sum _{k=-\infty }^{\infty }
+                \left(-1\right)^{k}x^{k\left(3k-1\right)/2} \\
+            &= 1+\sum _{k=1}^{\infty }(-1)^{k}
+                \left(x^{k(3k+1)/2}+x^{k(3k-1)/2}\right)
+    \end{align*}
+
+\subsection{Arithmetic Polynomial Evaluation}
+    \begin{align*}
+        & let \ degree(p(x)) = n; \\ \\
+        & \exists \ g(x) \ with \ d(g(x)) = n+1 \\ 
+        & such \ that \ e^x g(x) = \sum_{0}^{\infty} (p(i)x^i/i!)
+    \end{align*}
+
+\subsection{Lagrange Theorem}
+    \begin{gather*}
+        let f(g(x)) = x, f(0)=g(0)=0; \\ \\
+            [x^n]H(f(x)) = [x^{n-1}] H’(x)/((g(x)/x)^n)
+    \end{gather*}
+
+\subsection{Chirp Z Transform}
+    \[2ij = \Comb{i+j}{2}-\Comb{i}{2}-\Comb{j}{2} \]
+
+\subsection{Mobius Transform}
+    \[\mu (p^k) = [k==0] - [k==1] \]
+
+
