@@ -1,0 +1,46 @@
+\contentsline {section}{\numberline {1}NumberTheory}{1}{}%
+\contentsline {subsection}{\numberline {1.1}extended\_euclidean}{1}{}%
+\contentsline {subsection}{\numberline {1.2}factorizer}{1}{}%
+\contentsline {subsection}{\numberline {1.3}floor\_sum}{2}{}%
+\contentsline {subsection}{\numberline {1.4}cipolla\_sqrt}{2}{}%
+\contentsline {section}{\numberline {2}Strings}{3}{}%
+\contentsline {subsection}{\numberline {2.1}manacher}{3}{}%
+\contentsline {subsection}{\numberline {2.2}suffix\_array}{3}{}%
+\contentsline {subsection}{\numberline {2.3}aho\_corasick}{4}{}%
+\contentsline {subsection}{\numberline {2.4}suffix\_automaton}{4}{}%
+\contentsline {section}{\numberline {3}Polynomials}{5}{}%
+\contentsline {subsection}{\numberline {3.1}poly\_mono}{5}{}%
+\contentsline {subsection}{\numberline {3.2}poly\_arbitrary}{6}{}%
+\contentsline {subsection}{\numberline {3.3}poly\_bitwise}{7}{}%
+\contentsline {section}{\numberline {4}Trees}{7}{}%
+\contentsline {subsection}{\numberline {4.1}centroid\_decomposition}{7}{}%
+\contentsline {subsection}{\numberline {4.2}top\_tree}{8}{}%
+\contentsline {subsection}{\numberline {4.3}hld}{10}{}%
+\contentsline {section}{\numberline {5}Graphs}{11}{}%
+\contentsline {subsection}{\numberline {5.1}max\_flow}{11}{}%
+\contentsline {subsection}{\numberline {5.2}edmond\_blossom\_unweighted}{11}{}%
+\contentsline {subsection}{\numberline {5.3}edmond\_blossom\_weighted}{12}{}%
+\contentsline {subsection}{\numberline {5.4}minimum\_directed\_spanning\_tree}{14}{}%
+\contentsline {subsection}{\numberline {5.5}directed\_eulerian\_cycle}{15}{}%
+\contentsline {subsection}{\numberline {5.6}eulerian\_cycle}{15}{}%
+\contentsline {subsection}{\numberline {5.7}tarjan\_bridges\_articulation\_points}{16}{}%
+\contentsline {section}{\numberline {6}Geometry}{16}{}%
+\contentsline {subsection}{\numberline {6.1}convex\_hull}{16}{}%
+\contentsline {subsection}{\numberline {6.2}3d}{17}{}%
+\contentsline {subsection}{\numberline {6.3}lichao}{19}{}%
+\contentsline {section}{\numberline {7}STL}{19}{}%
+\contentsline {subsection}{\numberline {7.1}pbds}{19}{}%
+\contentsline {subsection}{\numberline {7.2}pragmas}{19}{}%
+\contentsline {subsection}{\numberline {7.3}random}{19}{}%
+\contentsline {section}{\numberline {8}Theory}{19}{}%
+\contentsline {subsection}{\numberline {8.1}Taylor function approximation}{19}{}%
+\contentsline {subsection}{\numberline {8.2}Pentagonal Theorem}{19}{}%
+\contentsline {subsection}{\numberline {8.3}Arithmetic Polynomial Evaluation}{19}{}%
+\contentsline {subsection}{\numberline {8.4}Lagrange Theorem}{20}{}%
+\contentsline {subsection}{\numberline {8.5}Chirp Z Transform}{20}{}%
+\contentsline {subsection}{\numberline {8.6}Mobius Transform}{20}{}%
+\contentsline {subsection}{\numberline {8.7}Xor Convolution}{20}{}%
+\contentsline {subsection}{\numberline {8.8}Or Convolution}{20}{}%
+\contentsline {subsection}{\numberline {8.9}And Convolution}{20}{}%
+\contentsline {subsection}{\numberline {8.10}GCD Convolution}{20}{}%
+\contentsline {subsection}{\numberline {8.11}LCM Convolution}{20}{}%

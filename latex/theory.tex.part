@@ -19,14 +19,32 @@
 
 \subsection{Lagrange Theorem}
     \begin{gather*}
-        let f(g(x)) = x, f(0)=g(0)=0; \\ \\
-            [x^n]H(f(x)) = [x^{n-1}] H’(x)/((g(x)/x)^n)
+        let f(g(x)) = x, f(0)=g(0)=0,\\
+        f'(0)=g'(0)=1; \\ \\
+        [x^n]H(f(x)) = [x^{n-1}] H'(x)/((g(x)/x)^n)
     \end{gather*}
 
 \subsection{Chirp Z Transform}
-    \[2ij = \Comb{i+j}{2}-\Comb{i}{2}-\Comb{j}{2} \]
+    \[ij = \Comb{i+j}{2}-\Comb{i}{2}-\Comb{j}{2} \]
 
 \subsection{Mobius Transform}
     \[\mu (p^k) = [k==0] - [k==1] \]
+    \[\sum_{d|n}\mu (d) = [n==1] \]
 
+\subsection{Xor Convolution}
+    \begin{gather*}
+        b_j = \sum a_i (-1)^{bitcount(i\&j)} \\
+        inverse \ is \ the \ same
+    \end{gather*}
 
+\subsection{Or Convolution}
+    \[ b_j = \sum a_i [i\&j == i] \]
+
+\subsection{And Convolution}
+    \[ b_j = \sum a_i [i|j == i] \]
+
+\subsection{GCD Convolution}
+    \[ b_j = \sum_{j|i} a_i ; \ inverse: \ reverse \ of \ code \]
+
+\subsection{LCM Convolution}
+    \[ b_j = \sum_{i|j} a_j ; \ inverse: \ reverse \ of \ code \]
