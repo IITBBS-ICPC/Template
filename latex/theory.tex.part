@@ -35,12 +35,25 @@
     \begin{gather*}
         dp(i,j) = \min_{i\leq k\le j} [dp(i,k)+dp(k+1,j)+C(i,j)] \\ \\
         use \ for \ finding \ opt(i,j) \\
-        opt(i,j-1) \leq opt(i,j) \leq opt(i+1,j); \\
+        opt(i,j-1) \leq opt(i,j) \leq opt(i+1,j);
     \end{gather*}
-    \begin{align*} 
-        & process \ as: \\
-        &   & for \ l \ in [0...n]: \\
-        &   &   & for \ i \ in \ [0..n]:
-        &   &    &    & for \ k \ in \ [opt(i,i+l-1),opt(i+1,i+l-2)]:
-        &   &    &    &     & dp(i,i+l) = ...
+   
+    \begin{align*}
+        & conditions:\\
+        & a\leq b\leq c\leq d \\
+        & \implies C(b,c) \leq C(a,d) \\
+        & \implies C(a,c)+C(b,d) \leq C(a,d)+C(b,c)
     \end{align*}
+
+    \centering
+    \begin{algorithmic}
+        \For{\texttt{$l$ in [0..n]}}
+            \For{\texttt{$i$ in [0..n]}}
+                \State $ L \gets opt(i,i+l-1) $
+                \State $ R \gets opt(i+1,i+l-2) $
+                \For{\texttt{$k$ in [L..R]}}
+                    \State $dp(i,i+l) \gets ...$
+                \EndFor
+            \EndFor
+        \EndFor
+    \end{algorithmic}
