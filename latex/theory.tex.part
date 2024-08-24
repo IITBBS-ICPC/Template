@@ -19,32 +19,28 @@
 
 \subsection{Lagrange Theorem}
     \begin{gather*}
-        let f(g(x)) = x, f(0)=g(0)=0,\\
-        f'(0)=g'(0)=1; \\ \\
-        [x^n]H(f(x)) = [x^{n-1}] H'(x)/((g(x)/x)^n)
+        let f(g(x)) = x, f(0)=g(0)=0; \\ \\
+            [x^n]H(f(x)) = [x^{n-1}] H’(x)/((g(x)/x)^n)
     \end{gather*}
 
 \subsection{Chirp Z Transform}
-    \[ij = \Comb{i+j}{2}-\Comb{i}{2}-\Comb{j}{2} \]
+    \[2ij = \Comb{i+j}{2}-\Comb{i}{2}-\Comb{j}{2} \]
 
 \subsection{Mobius Transform}
     \[\mu (p^k) = [k==0] - [k==1] \]
-    \[\sum_{d|n}\mu (d) = [n==1] \]
 
-\subsection{Xor Convolution}
+%% https://codeforces.com/blog/entry/8219
+
+\subsection{Knuth Dp Optimisation}
     \begin{gather*}
-        b_j = \sum a_i (-1)^{bitcount(i\&j)} \\
-        inverse \ is \ the \ same
+        dp(i,j) = \min_{i\leq k\le j} [dp(i,k)+dp(k+1,j)+C(i,j)] \\ \\
+        use \ for \ finding \ opt(i,j) \\
+        opt(i,j-1) \leq opt(i,j) \leq opt(i+1,j); \\
     \end{gather*}
-
-\subsection{Or Convolution}
-    \[ b_j = \sum a_i [i\&j == i] \]
-
-\subsection{And Convolution}
-    \[ b_j = \sum a_i [i|j == i] \]
-
-\subsection{GCD Convolution}
-    \[ b_j = \sum_{j|i} a_i ; \ inverse: \ reverse \ of \ code \]
-
-\subsection{LCM Convolution}
-    \[ b_j = \sum_{i|j} a_j ; \ inverse: \ reverse \ of \ code \]
+    \begin{align*} 
+        & process \ as: \\
+        &   & for \ l \ in [0...n]: \\
+        &   &   & for \ i \ in \ [0..n]:
+        &   &    &    & for \ k \ in \ [opt(i,i+l-1),opt(i+1,i+l-2)]:
+        &   &    &    &     & dp(i,i+l) = ...
+    \end{align*}

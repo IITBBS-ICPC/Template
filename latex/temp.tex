@@ -59,60 +59,44 @@
 \chead{Three Musketeers, IIT Bhubaneswar}
 \cfoot{- \thepage \ -}
   
+\section{Geometry}
+\subsection{3d}
+\lstinputlisting{../codes/Geometry/3d.h}
+\subsection{convex\_hull}
+\lstinputlisting{../codes/Geometry/convex_hull.h}
+\subsection{lichao}
+\lstinputlisting{../codes/Geometry/lichao.h}
+\section{Graphs}
+\subsection{directed\_eulerian\_cycle}
+\lstinputlisting{../codes/Graphs/directed_eulerian_cycle.h}
+\subsection{edmond\_blossom\_unweighted}
+\lstinputlisting{../codes/Graphs/edmond_blossom_unweighted.h}
+\subsection{edmond\_blossom\_weighted}
+\lstinputlisting{../codes/Graphs/edmond_blossom_weighted.h}
+\subsection{eulerian\_cycle}
+\lstinputlisting{../codes/Graphs/eulerian_cycle.h}
+\subsection{max\_flow}
+\lstinputlisting{../codes/Graphs/max_flow.h}
+\subsection{minimum\_directed\_spanning\_tree}
+\lstinputlisting{../codes/Graphs/minimum_directed_spanning_tree.h}
+\subsection{tarjan\_bridges\_articulation\_points}
+\lstinputlisting{../codes/Graphs/tarjan_bridges_articulation_points.h}
 \section{NumberTheory}
+\subsection{cipolla\_sqrt}
+\lstinputlisting{../codes/NumberTheory/cipolla_sqrt.h}
 \subsection{extended\_euclidean}
 \lstinputlisting{../codes/NumberTheory/extended_euclidean.h}
 \subsection{factorizer}
 \lstinputlisting{../codes/NumberTheory/factorizer.h}
 \subsection{floor\_sum}
 \lstinputlisting{../codes/NumberTheory/floor_sum.h}
-\subsection{cipolla\_sqrt}
-\lstinputlisting{../codes/NumberTheory/cipolla_sqrt.h}
-\section{Strings}
-\subsection{manacher}
-\lstinputlisting{../codes/Strings/manacher.h}
-\subsection{suffix\_array}
-\lstinputlisting{../codes/Strings/suffix_array.h}
-\subsection{aho\_corasick}
-\lstinputlisting{../codes/Strings/aho_corasick.h}
-\subsection{suffix\_automaton}
-\lstinputlisting{../codes/Strings/suffix_automaton.h}
 \section{Polynomials}
-\subsection{poly\_mono}
-\lstinputlisting{../codes/Polynomials/poly_mono.h}
 \subsection{poly\_arbitrary}
 \lstinputlisting{../codes/Polynomials/poly_arbitrary.h}
 \subsection{poly\_bitwise}
 \lstinputlisting{../codes/Polynomials/poly_bitwise.h}
-\section{Trees}
-\subsection{centroid\_decomposition}
-\lstinputlisting{../codes/Trees/centroid_decomposition.h}
-\subsection{top\_tree}
-\lstinputlisting{../codes/Trees/top_tree.h}
-\subsection{hld}
-\lstinputlisting{../codes/Trees/hld.h}
-\section{Graphs}
-\subsection{max\_flow}
-\lstinputlisting{../codes/Graphs/max_flow.h}
-\subsection{edmond\_blossom\_unweighted}
-\lstinputlisting{../codes/Graphs/edmond_blossom_unweighted.h}
-\subsection{edmond\_blossom\_weighted}
-\lstinputlisting{../codes/Graphs/edmond_blossom_weighted.h}
-\subsection{minimum\_directed\_spanning\_tree}
-\lstinputlisting{../codes/Graphs/minimum_directed_spanning_tree.h}
-\subsection{directed\_eulerian\_cycle}
-\lstinputlisting{../codes/Graphs/directed_eulerian_cycle.h}
-\subsection{eulerian\_cycle}
-\lstinputlisting{../codes/Graphs/eulerian_cycle.h}
-\subsection{tarjan\_bridges\_articulation\_points}
-\lstinputlisting{../codes/Graphs/tarjan_bridges_articulation_points.h}
-\section{Geometry}
-\subsection{convex\_hull}
-\lstinputlisting{../codes/Geometry/convex_hull.h}
-\subsection{3d}
-\lstinputlisting{../codes/Geometry/3d.h}
-\subsection{lichao}
-\lstinputlisting{../codes/Geometry/lichao.h}
+\subsection{poly\_mono}
+\lstinputlisting{../codes/Polynomials/poly_mono.h}
 \section{STL}
 \subsection{pbds}
 \lstinputlisting{../codes/STL/pbds.h}
@@ -120,6 +104,22 @@
 \lstinputlisting{../codes/STL/pragmas.h}
 \subsection{random}
 \lstinputlisting{../codes/STL/random.h}
+\section{Strings}
+\subsection{aho\_corasick}
+\lstinputlisting{../codes/Strings/aho_corasick.h}
+\subsection{manacher}
+\lstinputlisting{../codes/Strings/manacher.h}
+\subsection{suffix\_array}
+\lstinputlisting{../codes/Strings/suffix_array.h}
+\subsection{suffix\_automaton}
+\lstinputlisting{../codes/Strings/suffix_automaton.h}
+\section{Trees}
+\subsection{centroid\_decomposition}
+\lstinputlisting{../codes/Trees/centroid_decomposition.h}
+\subsection{hld}
+\lstinputlisting{../codes/Trees/hld.h}
+\subsection{top\_tree}
+\lstinputlisting{../codes/Trees/top_tree.h}
 \section{Theory}
 \subsection{Taylor function approximation}
     \[ y_{n+1} = y_n+[{A(x)-g(y)}/g’(y_n)] \]
@@ -141,34 +141,31 @@
 
 \subsection{Lagrange Theorem}
     \begin{gather*}
-        let f(g(x)) = x, f(0)=g(0)=0,\\
-        f'(0)=g'(0)=1; \\ \\
-        [x^n]H(f(x)) = [x^{n-1}] H'(x)/((g(x)/x)^n)
+        let f(g(x)) = x, f(0)=g(0)=0; \\ \\
+            [x^n]H(f(x)) = [x^{n-1}] H’(x)/((g(x)/x)^n)
     \end{gather*}
 
 \subsection{Chirp Z Transform}
-    \[ij = \Comb{i+j}{2}-\Comb{i}{2}-\Comb{j}{2} \]
+    \[2ij = \Comb{i+j}{2}-\Comb{i}{2}-\Comb{j}{2} \]
 
 \subsection{Mobius Transform}
     \[\mu (p^k) = [k==0] - [k==1] \]
-    \[\sum_{d|n}\mu (d) = [n==1] \]
 
-\subsection{Xor Convolution}
+%% https://codeforces.com/blog/entry/8219
+
+\subsection{Knuth Dp Optimisation}
     \begin{gather*}
-        b_j = \sum a_i (-1)^{bitcount(i\&j)} \\
-        inverse \ is \ the \ same
+        dp(i,j) = \min_{i\leq k\le j} [dp(i,k)+dp(k+1,j)+C(i,j)] \\ \\
+
+         use \ for \ finding \ opt(i,j) \\
+        opt(i,j-1) \leq opt(i,j) \leq opt(i+1,j); \\
     \end{gather*}
-
-\subsection{Or Convolution}
-    \[ b_j = \sum a_i [i\&j == i] \]
-
-\subsection{And Convolution}
-    \[ b_j = \sum a_i [i|j == i] \]
-
-\subsection{GCD Convolution}
-    \[ b_j = \sum_{j|i} a_i ; \ inverse: \ reverse \ of \ code \]
-
-\subsection{LCM Convolution}
-    \[ b_j = \sum_{i|j} a_j ; \ inverse: \ reverse \ of \ code \]
+    \begin{align*} 
+        & process \ as: \\
+        &   & for \ l \ in [0...n]: \\
+        &   &   & for \ i \ in \ [0..n]:
+        &   &    &    & for \ k \ in \ [opt(i,i+l-1),opt(i+1,i+l-2)]:
+        &   &    &    &     & dp(i,i+l) = ...
+    \end{align*}
 
 \end{document}
