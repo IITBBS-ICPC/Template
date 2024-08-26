@@ -49,6 +49,25 @@
 \subsection{LCM Convolution}
     \[ b_j = \sum_{i|j} a_j ; \ inverse: \ reverse \ of \ code \]
 
+\subsection{Picks Theorem}
+    \[A = i + (b/2) -1 \]
+
+%% https://codeforces.com/blog/entry/8219
+
+\subsection{Knuth Dp Optimisation}
+    \begin{gather*}
+        dp(i,j) = \min_{i\leq k\le j} [dp(i,k)+dp(k+1,j)+C(i,j)] \\ \\
+        use \ for \ finding \ opt(i,j) \\
+        opt(i,j-1) \leq opt(i,j) \leq opt(i+1,j);
+    \end{gather*}
+   
+    \begin{align*}
+        & conditions:\\
+        & a\leq b\leq c\leq d \\
+        & \implies C(b,c) \leq C(a,d) \\
+        & \implies C(a,c)+C(b,d) \leq C(a,d)+C(b,c)
+    \end{align*}
+
     \centering
     \begin{algorithmic}
         \For{\texttt{$l$ in [0..n]}}
