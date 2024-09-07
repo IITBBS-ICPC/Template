@@ -10,7 +10,7 @@
                 \left(x^{k(3k+1)/2}+x^{k(3k-1)/2}\right)
     \end{align*}
 
-\subsection{Arithmetic Polynomial Evaluation}
+\subsection{AP Polynomial Evaluation}
     \begin{align*}
         & let \ degree(p(x)) = n; \\ \\
         & \exists \ g(x) \ with \ d(g(x)) = n+1 \\ 
@@ -51,6 +51,9 @@
 
 \subsection{Picks Theorem}
     \[A = i + (b/2) -1 \]
+
+\subsection{Euler's Formula}
+    \[F + V = E + 2 \]
 
 %% https://codeforces.com/blog/entry/8219
 
