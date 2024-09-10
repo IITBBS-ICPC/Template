@@ -106,49 +106,50 @@
         & \textbf{special case : (for which above holds)}\\
         & \implies C(a,c)+C(b,d) \leq C(a,d)+C(b,c) \\
     \end{align*}
-    \begin{center}
-        \begin{algorithmic}
-        \State \textbf{Function} \texttt{compute}$(l, r, optl, optr)$:
-        \If{$l > r$}
-            \State \textbf{return}
-        \EndIf
-        \State $mid \gets \left\lfloor \frac{l + r}{2} \right\rfloor$
-        \State $best \gets (\infty, -1)$
-        \For{$k \gets optl$ to $\min(mid, optr)$}
-            \State $cost \gets (k > 0 ? dp\_before[k - 1] : 0) + C(k, mid)$
-            \State $best \gets \min(best, (cost, k))$
-        \EndFor
-        \State $dp\_cur[mid] \gets best.first$
-        \State $opt \gets best.second$
-        \State \texttt{compute}$(l, mid - 1, optl, opt)$
-        \State \texttt{compute}$(mid + 1, r, opt, optr)$
-        \\
-        \State \textbf{Function} \texttt{solve}():
-        \State \texttt{dp\_before} $\gets \{0\}_{i=0}^{n-1}$ 
-        \State \texttt{dp\_cur} $\gets \{0\}_{i=0}^{n-1}$
-        \For{$i \gets 0$ to $n-1$}
-            \State \texttt{dp\_before}$[i] \gets C(0, i)$
-        \EndFor
-        \For{$i \gets 1$ to $m-1$}
-            \State \texttt{compute}$(0, n - 1, 0, n - 1)$
-            \State \texttt{dp\_before} $\gets \texttt{dp\_cur}$
-        \EndFor
-        \State \textbf{return} \texttt{dp\_before}$[n-1]$
-        \end{algorithmic}
-    \end{center}
-\subsection{table}
-\begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Name} & \textbf{Equation} & \textbf{Condition} \\ \hline
-CH Opt1 & $dp[i] = \min_{j < i} \{ dp[j] + b[j] \cdot a[i] \}$ & $b[j] \geq b[j+1], a[i] \leq a[i+1]$ \\ \hline
-CH Opt2 & $dp[i][j] = \min_{k < j} \{ dp[i-1][k] + b[k] \cdot a[j] \}$ & $b[k] \geq b[k+1], a[j] \leq a[j+1]$ \\ \hline
-Divide \& Conquer & $dp[i][j] = \min_{k < j} \{ dp[i-1][k] + C[k][j] \}$ & $A[i][j] \leq A[i][j+1]$ \\ \hline
-Knuth Opt & $dp[i][j] = \min_{i < k < j} \{ dp[i][k] + dp[k][j] \} + C[i][j]$ & $A[i][j-1] \leq A[i][j] \leq A[i+1][j]$ \\ \hline
-\end{tabular}
-\caption{Optimization Techniques}
-\end{table}
+%    \begin{center}
+%        \begin{algorithmic}
+%        \State \textbf{Function} \texttt{compute}$(l, r, optl, optr)$:
+%        \If{$l > r$}
+%            \State \textbf{return}
+%        \EndIf
+%        \State $mid \gets \left\lfloor \frac{l + r}{2} \right\rfloor$
+%        \State $best \gets (\infty, -1)$
+%        \For{$k \gets optl$ to $\min(mid, optr)$}
+%            \State $cost \gets (k > 0 ? dp\_before[k - 1] : 0) + C(k, mid)$
+%            \State $best \gets \min(best, (cost, k))$
+%        \EndFor
+%        \State $dp\_cur[mid] \gets best.first$
+%        \State $opt \gets best.second$
+%        \State \texttt{compute}$(l, mid - 1, optl, opt)$
+%        \State \texttt{compute}$(mid + 1, r, opt, optr)$
+%        \\
+%        \State \textbf{Function} \texttt{solve}():
+%        \State \texttt{dp\_before} $\gets \{0\}_{i=0}^{n-1}$ 
+%        \State \texttt{dp\_cur} $\gets \{0\}_{i=0}^{n-1}$
+%        \For{$i \gets 0$ to $n-1$}
+%            \State \texttt{dp\_before}$[i] \gets C(0, i)$
+%        \EndFor
+%        \For{$i \gets 1$ to $m-1$}
+%            \State \texttt{compute}$(0, n - 1, 0, n - 1)$
+%            \State \texttt{dp\_before} $\gets \texttt{dp\_cur}$
+%        \EndFor
+%        \State \textbf{return} \texttt{dp\_before}$[n-1]$
+%        \end{algorithmic}
+%    \end{center}
+%\onecolumn
+%\subsection{table}
+%\begin{table}[h!]
+%\centering
+%\begin{tabular}{|c|c|c|}
+%\hline
+%\textbf{Name} & \textbf{Equation} & \textbf{Condition} \\ \hline
+%CH Opt1 & $dp[i] = \min_{j < i} \{ dp[j] + b[j] \cdot a[i] \}$ & $b[j] \geq b[j+1], a[i] \leq a[i+1]$ \\ \hline
+%CH Opt2 & $dp[i][j] = \min_{k < j} \{ dp[i-1][k] + b[k] \cdot a[j] \}$ & $b[k] \geq b[k+1], a[j] \leq a[j+1]$ \\ \hline
+%Divide \& Conquer & $dp[i][j] = \min_{k < j} \{ dp[i-1][k] + C[k][j] \}$ & $A[i][j] \leq A[i][j+1]$ \\ \hline
+%Knuth Opt & $dp[i][j] = \min_{i < k < j} \{ dp[i][k] + dp[k][j] \} + C[i][j]$ & $A[i][j-1] \leq A[i][j] \leq A[i+1][j]$ \\ \hline
+%\end{tabular}
+%\caption{Optimization Techniques}
+%\end{table}
 
 
 \end{document}
