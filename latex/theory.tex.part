@@ -83,3 +83,22 @@
             \EndFor
         \EndFor
     \end{algorithmic}
+
+\subsection{Convex Hull Trick}
+    \begin{gather*}
+        dp(i) = \min_{j \le i } [dp(j)+b[j] \cdot a[i] ] \\ \\
+    \end{gather*}
+    
+\subsection{table}
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Name} & \textbf{Equation} & \textbf{Condition} \\ \hline
+CH Opt1 & $dp[i] = \min_{j < i} \{ dp[j] + b[j] \cdot a[i] \}$ & $b[j] \geq b[j+1], a[i] \leq a[i+1]$ \\ \hline
+CH Opt2 & $dp[i][j] = \min_{k < j} \{ dp[i-1][k] + b[k] \cdot a[j] \}$ & $b[k] \geq b[k+1], a[j] \leq a[j+1]$ \\ \hline
+Divide \& Conquer & $dp[i][j] = \min_{k < j} \{ dp[i-1][k] + C[k][j] \}$ & $A[i][j] \leq A[i][j+1]$ \\ \hline
+Knuth Opt & $dp[i][j] = \min_{i < k < j} \{ dp[i][k] + dp[k][j] \} + C[i][j]$ & $A[i][j-1] \leq A[i][j] \leq A[i+1][j]$ \\ \hline
+\end{tabular}
+\caption{Optimization Techniques}
+\end{table}
