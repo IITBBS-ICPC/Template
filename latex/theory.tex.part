@@ -17,11 +17,12 @@
         & such \ that \ e^x g(x) = \sum_{0}^{\infty} (p(i)x^i/i!)
     \end{align*}
 
-\subsection{Lagrange Theorem}
+\subsection{Lagrange Inversion Theorem}
     \begin{gather*}
         let f(g(x)) = x, f(0)=g(0)=0,\\
         f'(0)=g'(0)=1; \\ \\
-        [x^n]H(f(x)) = [x^{n-1}] H'(x)/((g(x)/x)^n)
+        [x^n]H(f(x)) = [x^{n-1}] \frac{1}{n}\frac{H'(x)}{((\frac{g(x)}{x})^n)} \\
+        [x^n]H(f(x)) = [x^{n-2}] \frac{H(x)}{((\frac{g(x)}{x})^{n-1})}(\frac{g'(x)}{g(x)^2})
     \end{gather*}
 
 \subsection{Chirp Z Transform}
@@ -31,22 +32,23 @@
     \[\mu (p^k) = [k==0] - [k==1] \]
     \[\sum_{d|n}\mu (d) = [n==1] \]
 
-\subsection{Xor Convolution}
+\subsection{Convolution}
+\subsubsection*{Xor Convolution}
     \begin{gather*}
         b_j = \sum a_i (-1)^{bitcount(i\&j)} \\
         inverse \ is \ the \ same
     \end{gather*}
 
-\subsection{Or Convolution}
+\subsubsection*{Or Convolution}
     \[ b_j = \sum a_i [i\&j == i] \]
 
-\subsection{And Convolution}
+\subsubsection*{And Convolution}
     \[ b_j = \sum a_i [i|j == i] \]
 
-\subsection{GCD Convolution}
+\subsubsection*{GCD Convolution}
     \[ b_j = \sum_{j|i} a_i ; \ inverse: \ reverse \ of \ code \]
 
-\subsection{LCM Convolution}
+\subsubsection*{LCM Convolution}
     \[ b_j = \sum_{i|j} a_j ; \ inverse: \ reverse \ of \ code \]
 
 \subsection{Picks Theorem}
@@ -55,9 +57,10 @@
 \subsection{Euler's Formula}
     \[F + V = E + 2 \]
 
+\subsection{DP Optimisations}
 %% https://codeforces.com/blog/entry/8219
 
-\subsection{Knuth Dp Optimisation}
+\subsubsection*{Knuth Dp Optimisation}
     \begin{gather*}
         dp(i,j) = \min_{i\leq k\le j} [dp(i,k)+dp(k+1,j)+C(i,j)] \\ \\
         use \ for \ finding \ opt(i,j) \\
@@ -84,7 +87,7 @@
         \EndFor
     \end{algorithmic}
     \end{center}
-\subsection{Convex Hull Trick}
+\subsubsection*{Convex Hull Trick}
     \begin{gather*}
         dp_i = \min_{j \le i } [dp_j+b_j \cdot a_i ]
     \end{gather*}
@@ -95,7 +98,7 @@
         & a[i] \leq a[i+1]
     \end{align*}
     \textbf{add ($b_j$ , $dp_j$) = (m,c) as $y=mx+c$,  in Convex Hull} 
-\subsection{Divide and Conquer} 
+\subsubsection*{Divide and Conquer} 
     \begin{gather*}
         dp(i, j) = \min_{0 \leq k \leq j} { dp(i - 1, k - 1) + C(k, j) }
     \end{gather*}
@@ -106,36 +109,42 @@
         & \textbf{special case : (for which above holds)}\\
         & \implies C(a,c)+C(b,d) \leq C(a,d)+C(b,c) \\
     \end{align*}
-%    \begin{center}
-%        \begin{algorithmic}
-%        \State \textbf{Function} \texttt{compute}$(l, r, optl, optr)$:
-%        \If{$l > r$}
-%            \State \textbf{return}
-%        \EndIf
-%        \State $mid \gets \left\lfloor \frac{l + r}{2} \right\rfloor$
-%        \State $best \gets (\infty, -1)$
-%        \For{$k \gets optl$ to $\min(mid, optr)$}
-%            \State $cost \gets (k > 0 ? dp\_before[k - 1] : 0) + C(k, mid)$
-%            \State $best \gets \min(best, (cost, k))$
-%        \EndFor
-%        \State $dp\_cur[mid] \gets best.first$
-%        \State $opt \gets best.second$
-%        \State \texttt{compute}$(l, mid - 1, optl, opt)$
-%        \State \texttt{compute}$(mid + 1, r, opt, optr)$
-%        \\
-%        \State \textbf{Function} \texttt{solve}():
-%        \State \texttt{dp\_before} $\gets \{0\}_{i=0}^{n-1}$ 
-%        \State \texttt{dp\_cur} $\gets \{0\}_{i=0}^{n-1}$
-%        \For{$i \gets 0$ to $n-1$}
-%            \State \texttt{dp\_before}$[i] \gets C(0, i)$
-%        \EndFor
-%        \For{$i \gets 1$ to $m-1$}
-%            \State \texttt{compute}$(0, n - 1, 0, n - 1)$
-%            \State \texttt{dp\_before} $\gets \texttt{dp\_cur}$
-%        \EndFor
-%        \State \textbf{return} \texttt{dp\_before}$[n-1]$
-%        \end{algorithmic}
-%    \end{center}
+    \begin{center}
+        \begin{algorithmic}
+        \State \textbf{Function} \texttt{compute}$(l, r, optl, optr)$:
+        \If{$l > r$}
+            \State \textbf{return}
+        \EndIf
+        \State $mid \gets \left\lfloor \frac{l + r}{2} \right\rfloor$
+        \State $best \gets (\infty, -1)$
+        \For{$k \gets optl$ to $\min(mid, optr)$}
+            \State $cost \gets (k > 0 ? dp\_before[k - 1] : 0) + C(k, mid)$
+            \State $best \gets \min(best, (cost, k))$
+        \EndFor
+        \State $dp\_cur[mid] \gets best.first$
+        \State $opt \gets best.second$
+        \State \texttt{compute}$(l, mid - 1, optl, opt)$
+        \State \texttt{compute}$(mid + 1, r, opt, optr)$
+        \\
+        \State \textbf{Function} \texttt{solve}():
+        \State \texttt{dp\_before} $\gets \{0\}_{i=0}^{n-1}$ 
+        \State \texttt{dp\_cur} $\gets \{0\}_{i=0}^{n-1}$
+        \For{$i \gets 0$ to $n-1$}
+            \State \texttt{dp\_before}$[i] \gets C(0, i)$
+        \EndFor
+        \For{$i \gets 1$ to $m-1$}
+            \State \texttt{compute}$(0, n - 1, 0, n - 1)$
+            \State \texttt{dp\_before} $\gets \texttt{dp\_cur}$
+        \EndFor
+        \State \textbf{return} \texttt{dp\_before}$[n-1]$
+        \end{algorithmic}
+    \end{center}
+\subsubsection*{Aliens Trick} 
+    Ensure convexity/concavity in answer array
+    \begin{align*}
+        &\forall i \in \{1, 2, \dots, n\}, \quad \text{ans}[i] - \text{ans}[i-1] \leq \text{ans}[i+1] - \text{ans}[i] \\
+        &\forall i \in \{1, 2, \dots, n\}, \quad \text{ans}[i] - \text{ans}[i-1] \geq \text{ans}[i+1] - \text{ans}[i]
+    \end{align*}
 %\onecolumn
 %\subsection{table}
 %\begin{table}[h!]
