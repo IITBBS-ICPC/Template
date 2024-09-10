@@ -71,7 +71,7 @@
         & \implies C(a,c)+C(b,d) \leq C(a,d)+C(b,c)
     \end{align*}
 
-    \centering
+    \begin{center}
     \begin{algorithmic}
         \For{\texttt{$l$ in [0..n]}}
             \For{\texttt{$i$ in [0..n]}}
@@ -83,12 +83,59 @@
             \EndFor
         \EndFor
     \end{algorithmic}
-
+    \end{center}
 \subsection{Convex Hull Trick}
     \begin{gather*}
-        dp(i) = \min_{j \le i } [dp(j)+b[j] \cdot a[i] ] \\ \\
+        dp_i = \min_{j \le i } [dp_j+b_j \cdot a_i ]
     \end{gather*}
     
+    \begin{align*}
+        & conditions:\\
+        & b[j] \geq b[j+1] \\
+        & a[i] \leq a[i+1]
+    \end{align*}
+    \textbf{add ($b_j$ , $dp_j$) = (m,c) as $y=mx+c$,  in Convex Hull} 
+\subsection{Divide and Conquer} 
+    \begin{gather*}
+        dp(i, j) = \min_{0 \leq k \leq j} { dp(i - 1, k - 1) + C(k, j) }
+    \end{gather*}
+    \begin{align*}
+        & \textbf{conditions}:\\
+        & j<0 \implies dp(i,j)=0 \\
+        & opt(i,j) \leq opt(i,j+1) \\
+        & \textbf{special case : (for which above holds)}\\
+        & \implies C(a,c)+C(b,d) \leq C(a,d)+C(b,c) \\
+    \end{align*}
+    \begin{center}
+        \begin{algorithmic}
+        \State \textbf{Function} \texttt{compute}$(l, r, optl, optr)$:
+        \If{$l > r$}
+            \State \textbf{return}
+        \EndIf
+        \State $mid \gets \left\lfloor \frac{l + r}{2} \right\rfloor$
+        \State $best \gets (\infty, -1)$
+        \For{$k \gets optl$ to $\min(mid, optr)$}
+            \State $cost \gets (k > 0 ? dp\_before[k - 1] : 0) + C(k, mid)$
+            \State $best \gets \min(best, (cost, k))$
+        \EndFor
+        \State $dp\_cur[mid] \gets best.first$
+        \State $opt \gets best.second$
+        \State \texttt{compute}$(l, mid - 1, optl, opt)$
+        \State \texttt{compute}$(mid + 1, r, opt, optr)$
+        \\
+        \State \textbf{Function} \texttt{solve}():
+        \State \texttt{dp\_before} $\gets \{0\}_{i=0}^{n-1}$ 
+        \State \texttt{dp\_cur} $\gets \{0\}_{i=0}^{n-1}$
+        \For{$i \gets 0$ to $n-1$}
+            \State \texttt{dp\_before}$[i] \gets C(0, i)$
+        \EndFor
+        \For{$i \gets 1$ to $m-1$}
+            \State \texttt{compute}$(0, n - 1, 0, n - 1)$
+            \State \texttt{dp\_before} $\gets \texttt{dp\_cur}$
+        \EndFor
+        \State \textbf{return} \texttt{dp\_before}$[n-1]$
+        \end{algorithmic}
+    \end{center}
 \subsection{table}
 \begin{table}[h!]
 \centering
@@ -102,3 +149,6 @@ Knuth Opt & $dp[i][j] = \min_{i < k < j} \{ dp[i][k] + dp[k][j] \} + C[i][j]$ & 
 \end{tabular}
 \caption{Optimization Techniques}
 \end{table}
+
+
+\end{document}
