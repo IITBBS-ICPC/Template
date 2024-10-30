@@ -1,101 +1,110 @@
+#include <bits/stdc++.h>
 
-#include<bits/stdc++.h>
 using namespace std;
-class HLD {
-    vector<int> segtree, parent, depth, heavy, head, pos, maxdepth;
-    int cur_pos;
 
-    int combine(int lval, int rval) {
-        return max(lval, rval);
-    }
-
-    void segtree_update(int v, int l, int r, int x, int val) {
-        if (x < l || r < x)return;
-        if (l == r) {
-            segtree[v] = val;
-            return;
-        }
-        int mid = (l + r) >> 1;
-        int z = (mid + 1 - l) << 1;
-        if (x <= mid)
-            segtree_update(v + 1, l, mid, x, val);
-        else
-            segtree_update(v + z, mid + 1, r, x, val);
-
-        segtree[v] = combine(segtree[v + 1], segtree[v + z]);
-    }
-
-    int segtree_query(int v, int l, int r, int L, int R) {
-        if (R < l || r < L)return 0;
-        if (L <= l && r <= R) return segtree[v];
-        int mid = (l + r) >> 1;
-        int z = (mid + 1 - l) << 1;
-        return combine(segtree_query(v + 1, l, mid, L, R), segtree_query(v + z, mid + 1, r, L, R));
-    }
-
-    // HLD Template
-    // Taken from cp-algotithms
-
-
-    int dfs(int v, vector<vector<int>> const& adj) {
-        int size = 1;
-        int max_c_size = 0;
-        maxdepth[v] = depth[v];
-        for (int c : adj[v]) {
-            if (c != parent[v]) {
-                parent[c] = v, depth[c] = depth[v] + 1;
-                int c_size = dfs(c, adj);
-                size += c_size;
-                if (c_size > max_c_size) {
-                    max_c_size = c_size,
-                        heavy[v] = c, maxdepth[v] = maxdepth[c];
-                }
-            }
-        }
-        return size;
-    }
-
-    void decompose(int v, int h, vector<vector<int>> const& adj) {
-        head[v] = h, pos[v] = cur_pos++;        // Now v is present at pos[v]
-        if (heavy[v] != -1)
-            decompose(heavy[v], h, adj);
-        for (int c : adj[v]) {
-            if (c != parent[v] && c != heavy[v])
-                decompose(c, c, adj);
-        }
-    }
-
-public:
-    HLD(vector<vector<int>> const& adj) {
-        int n = adj.size();
-        parent = depth = head = pos = maxdepth = vector<int>(n);
-        heavy = vector<int>(n, -1);
-        segtree = vector<int>(n << 1);
-        cur_pos = 0;
-
-        dfs(0, adj);
-        decompose(0, 0, adj);
-    }
-
-    int query(int a, int b) {
-        int res = 0;
-        for (; head[a] != head[b]; b = parent[head[b]]) {
-
-            if (depth[head[a]] > depth[head[b]])
-                swap(a, b);
-            int cur_heavy_path_res = segtree_query(pos[head[b]] << 1, depth[head[b]], maxdepth[b], depth[head[b]], depth[b]);
-            res = combine(res, cur_heavy_path_res);
-        }
-
-        if (depth[a] > depth[b])
-            swap(a, b);
-        int last_heavy_path_max = segtree_query(pos[head[b]] << 1, depth[head[b]], maxdepth[b], depth[a], depth[b]);
-        res = combine(res, last_heavy_path_max);
-        return res;
-    }
-
-
-    void update(int x, int val) { // 0 based indexing
-        segtree_update(pos[head[x]] << 1, depth[head[x]], maxdepth[x], depth[x], val);
-    }
+// Required additional data structures
+struct node {
+  node(int v);
+  static node combine(node &a, node &b);
 };
+struct SegmentTree {
+  void build(vector<int> &arr);
+  node query(int v, int tl, int tr, int l, int r);
+  node query(int l, int r);
+  void update(int v, int tl, int tr, int l, int r, int x);
+  void update(int l, int r, int x);
+};
+
+struct HLD {
+  vector<int> ord;
+  vector<int> pos;
+  vector<int> head;
+  vector<int> par;
+  vector<int> depth;
+  vector<int> heavy;
+  SegmentTree st;
+
+  void build(vector<vector<int>> &g, vector<int> &a) {
+    int n = g.size() - 1;
+    pos.assign(n + 1, 0), head.assign(n + 1, 0), par.assign(n + 1, 0),
+      depth.assign(n + 1, 0), heavy.assign(n + 1, 0);
+
+    function<int(int, int)> dfs = [&](int v, int p) {
+      int sz = 1;
+      int mxcsz = 0;
+      for(auto c : g[v]) {
+        if(c != p) {
+          par[c] = v;
+          depth[c] = depth[v] + 1;
+
+          int csz = dfs(c, v);
+
+          sz += csz;
+          if(csz > mxcsz) {
+            heavy[v] = c;
+            mxcsz = csz;
+          }
+        }
+      }
+      return sz;
+    };
+
+    function<void(int, int, int)> decomp = [&](int v, int p, int h) {
+      head[v] = h;
+      ord.push_back(a[v]);
+      pos[v] = ord.size() - 1;
+
+      if(heavy[v])
+        decomp(heavy[v], v, h);
+      for(auto c : g[v]) {
+        if(c != p && c != heavy[v]) {
+          decomp(c, v, c);
+        }
+      }
+    };
+
+    dfs(1, 0);
+    decomp(1, 0, 1);
+    st.build(ord);
+  }
+
+  int query(int u, int v) {
+    node resu, resv;
+    for(; head[u] != head[v]; v = par[head[v]]) {
+      if(depth[head[u]] > depth[head[v]]) {
+        swap(u, v);
+        swap(resu, resv);
+      }
+      node q = st.query(pos[head[v]], pos[v]);
+      resv = node::combine(q, resv);
+    }
+    if(depth[u] > depth[v]) {
+      swap(u, v);
+      swap(resu, resv);
+    }
+
+    node q = st.query(pos[u], pos[v]);
+    resv = node::combine(q, resv);
+
+    // resv stores query LCA to v
+    // resu stores query form LCA to u
+    // lower depth side is considered left in each query, process accordingly
+
+    int res; // define combination of lca - node queries
+    return res;
+  }
+
+  void update(int u, int v, int x) {
+    for(; head[u] != head[v]; v = par[head[v]]) {
+      if(depth[head[u]] > depth[head[v]]) {
+        swap(u, v);
+      }
+      st.update(pos[head[v]], pos[v], x);
+    }
+    if(depth[u] > depth[v]) {
+      swap(u, v);
+    }
+    st.update(pos[u], pos[v], x);
+  }
+};
+
