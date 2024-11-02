@@ -13,7 +13,7 @@ int gcd(int a, int b, int& x, int& y) {
 }
 
 // find any solution to ax + by = c (g will store their gcd). 
-// Generalized x and y can be given by: x = x0 + r*lcm(a,b)  and y = y0 - r*lcm(a,b)
+// Generalized x and y can be given by: x = x0 + k * (b/g)  and y = y0 - k * (a/g) , where k is an integer
 bool find_any_solution(long long a, long long b, long long c, long long &x0, long long &y0, long long &g) {
 	g = gcd(abs(a), abs(b), x0, y0);
 	if (c % g) {
