@@ -1,240 +1,218 @@
-struct Blossom {
-    const long long inf = 1e18;
-    static const int N = 105; // > Max number of vertices.
-    struct edge {
-        int u, v;
-        long long w;
-    } g[N * 2][N * 2];
-    int n, n_x, match[N * 2], slack[N * 2], st[N * 2], pa[N * 2], flower_from[N * 2][N * 2], S[N * 2], vis[N * 2];
-    long long lab[N * 2];
-    long long dist(edge const& e) { return lab[e.u] + lab[e.v] - g[e.u][e.v].w * 2; }
-    vector<int> flower[N * 2];
-    deque<int> q;
-    Blossom(int _n) {
-        n = _n;
-        q = deque<int>();
-        for (int u = 1; u <= n * 2; ++u) {
-            match[u] = slack[u] = st[u] = pa[u] = S[u] = vis[u] = lab[u] = 0;
-            for (int v = 1; v <= n * 2; ++v) {
-                g[u][v] = edge{u, v, 0};
-                flower_from[u][v] = 0;
-            }
-            flower[u].clear();
-        }
+using lld = int64_t;
+#define all(v) v.begin(), v.end()
+#define REP(i, l, r) for(int i = (l); i <= (r); ++i)
+struct WeightGraph { // 1-based
+  static const int inf = INT_MAX;
+  struct edge {
+    int u, v, w;
+  };
+  int n, nx;
+  vector<int> lab;
+  vector<vector<edge>> g;
+  vector<int> slack, match, st, pa, S, vis;
+  vector<vector<int>> flo, flo_from;
+  queue<int> q;
+  WeightGraph(int n_)
+      : n(n_), nx(n * 2), lab(nx + 1), g(nx + 1, vector<edge>(nx + 1)),
+        slack(nx + 1), flo(nx + 1), flo_from(nx + 1, vector(n + 1, 0)) {
+    match = st = pa = S = vis = slack;
+    REP(u, 1, n) REP(v, 1, n) g[u][v] = {u, v, 0};
+  }
+  int ED(edge e) { return lab[e.u] + lab[e.v] - g[e.u][e.v].w * 2; }
+  void update_slack(int u, int x, int &s) {
+    if(!s || ED(g[u][x]) < ED(g[s][x]))
+      s = u;
+  }
+  void set_slack(int x) {
+    slack[x] = 0;
+    REP(u, 1, n)
+    if(g[u][x].w > 0 && st[u] != x && S[st[u]] == 0)
+      update_slack(u, x, slack[x]);
+  }
+  void q_push(int x) {
+    if(x <= n)
+      q.push(x);
+    else
+      for(int y : flo[x])
+        q_push(y);
+  }
+  void set_st(int x, int b) {
+    st[x] = b;
+    if(x > n)
+      for(int y : flo[x])
+        set_st(y, b);
+  }
+  vector<int> split_flo(auto &f, int xr) {
+    auto it = find(all(f), xr);
+    if(auto pr = it - f.begin(); pr % 2 == 1)
+      reverse(1 + all(f)), it = f.end() - pr;
+    auto res = vector(f.begin(), it);
+    return f.erase(f.begin(), it), res;
+  }
+  void set_match(int u, int v) {
+    match[u] = g[u][v].v;
+    if(u <= n)
+      return;
+    int xr = flo_from[u][g[u][v].u];
+    auto &f = flo[u], z = split_flo(f, xr);
+    REP(i, 0, int(z.size()) - 1) set_match(z[i], z[i ^ 1]);
+    set_match(xr, v);
+    f.insert(f.end(), all(z));
+  }
+  void augment(int u, int v) {
+    for(;;) {
+      int xnv = st[match[u]];
+      set_match(u, v);
+      if(!xnv)
+        return;
+      set_match(v = xnv, u = st[pa[xnv]]);
     }
-    void add_edge(int u, int v, long long w) {
-        ++u; ++v;
-        g[u][v].w = max(g[u][v].w, w);
-        g[v][u].w = max(g[v][u].w, w);
+  }
+  /* SPLIT_HASH_HERE */
+  int lca(int u, int v) {
+    static int t = 0;
+    ++t;
+    for(++t; u || v; swap(u, v))
+      if(u) {
+        if(vis[u] == t)
+          return u;
+        vis[u] = t;
+        u = st[match[u]];
+        if(u)
+          u = st[pa[u]];
+      }
+    return 0;
+  }
+  void add_blossom(int u, int o, int v) {
+    int b = int(find(n + 1 + all(st), 0) - begin(st));
+    lab[b] = 0, S[b] = 0;
+    match[b] = match[o];
+    vector<int> f = {o};
+    for(int x : {u, v}) {
+      for(int y; x != o; x = st[pa[y]])
+        f.emplace_back(x), f.emplace_back(y = st[match[x]]), q_push(y);
+      reverse(1 + all(f));
     }
-    inline void update_slack(int u, int x) {
-        if (!slack[x] || dist(g[u][x]) < dist(g[slack[x]][x])) slack[x] = u;
+    flo[b] = f;
+    set_st(b, b);
+    REP(x, 1, nx) g[b][x].w = g[x][b].w = 0;
+    REP(x, 1, n) flo_from[b][x] = 0;
+    for(int xs : flo[b]) {
+      REP(x, 1, nx)
+      if(g[b][x].w == 0 || ED(g[xs][x]) < ED(g[b][x]))
+        g[b][x] = g[xs][x], g[x][b] = g[x][xs];
+      REP(x, 1, n)
+      if(flo_from[xs][x])
+        flo_from[b][x] = xs;
     }
-    inline void set_slack(int x) {
-        slack[x] = 0;
-        for (int u = 1; u <= n; ++u) {
-            if (g[u][x].w > 0 && st[u] != x && S[st[u]] == 0) update_slack(u, x);
-        }
+    set_slack(b);
+  }
+  void expand_blossom(int b) {
+    for(int x : flo[b])
+      set_st(x, x);
+    int xr = flo_from[b][g[b][pa[b]].u], xs = -1;
+    for(int x : split_flo(flo[b], xr)) {
+      if(xs == -1) {
+        xs = x;
+        continue;
+      }
+      pa[xs] = g[x][xs].u;
+      S[xs] = 1, S[x] = 0;
+      slack[xs] = 0;
+      set_slack(x);
+      q_push(x);
+      xs = -1;
     }
-    inline void q_push(int x) {
-        if (x <= n) return q.push_back(x);
-        for (int i = 0; i < (int)flower[x].size(); i++) q_push(flower[x][i]);
+    for(int x : flo[b])
+      if(x == xr)
+        S[x] = 1, pa[x] = pa[b];
+      else
+        S[x] = -1, set_slack(x);
+    st[b] = 0;
+  }
+  bool on_found_edge(const edge &e) {
+    if(int u = st[e.u], v = st[e.v]; S[v] == -1) {
+      int nu = st[match[v]];
+      pa[v] = e.u;
+      S[v] = 1;
+      slack[v] = slack[nu] = 0;
+      S[nu] = 0;
+      q_push(nu);
+    } else if(S[v] == 0) {
+      if(int o = lca(u, v))
+        add_blossom(u, o, v);
+      else
+        return augment(u, v), augment(v, u), true;
     }
-    inline void set_st(int x, int b) {
-        st[x] = b;
-        if (x <= n) return;
-        for (int i = 0; i < (int)flower[x].size(); ++i) set_st(flower[x][i], b);
-    }
-    inline int get_pr(int b, int xr) {
-        int pr = find(flower[b].begin(), flower[b].end(), xr) - flower[b].begin();
-        if (pr % 2 == 1) {
-            reverse(flower[b].begin() + 1, flower[b].end());
-            return (int)flower[b].size() - pr;
-        } else return pr;
-    }
-    inline void set_match(int u, int v) {
-        match[u] = g[u][v].v;
-        if (u <= n) return;
-        edge e = g[u][v];
-        int xr = flower_from[u][e.u], pr = get_pr(u, xr);
-        for (int i = 0; i < pr; ++i) set_match(flower[u][i], flower[u][i ^ 1]);
-        set_match(xr, v);
-        rotate(flower[u].begin(), flower[u].begin() + pr, flower[u].end());
-    }
-    inline void augment(int u, int v) {
-        int xnv = st[match[u]];
-        set_match(u, v);
-        if (!xnv) return;
-        set_match(xnv, st[pa[xnv]]);
-        augment(st[pa[xnv]], xnv);
-    }
-    inline int get_lca(int u, int v) {
-        static int t = 0;
-        for (++t; u || v; swap(u, v)) {
-            if (u == 0) continue;
-            if (vis[u] == t) return u;
-            vis[u] = t;
-            u = st[match[u]];
-            if (u) u = st[pa[u]];
-        }
-        return 0;
-    }
-    inline void add_blossom(int u, int lca, int v) {
-        int b = n + 1;
-        while(b <= n_x && st[b]) ++b;
-        if (b > n_x) ++n_x;
-        lab[b] = 0, S[b] = 0;
-        match[b] = match[lca];
-        flower[b].clear();
-        flower[b].push_back(lca);
-        for (int x = u, y; x != lca; x = st[pa[y]]) {
-            flower[b].push_back(x), flower[b].push_back(y = st[match[x]]), q_push(y);
-        }
-        reverse(flower[b].begin() + 1, flower[b].end());
-        for (int x = v, y; x != lca; x = st[pa[y]]) {
-            flower[b].push_back(x), flower[b].push_back(y = st[match[x]]), q_push(y);
-        }
-        set_st(b, b);
-        for (int x = 1; x <= n_x; ++x) g[b][x].w = g[x][b].w = 0;
-        for (int x = 1; x <= n; ++x) flower_from[b][x] = 0;
-        for (int i = 0; i < (int)flower[b].size(); ++i) {
-            int xs = flower[b][i];
-            for (int x = 1; x <= n_x; ++x) {
-                if (g[b][x].w == 0 || dist(g[xs][x]) < dist(g[b][x]))
-                    g[b][x] = g[xs][x], g[x][b] = g[x][xs];
-            }
-            for (int x = 1; x <= n; ++x) {
-                if (flower_from[xs][x]) flower_from[b][x] = xs;
-            }
-        }
-        set_slack(b);
-    }
-    inline void expand_blossom(int b) { // S[b] == 1
-        for (int i = 0; i < (int)flower[b].size(); ++i) set_st(flower[b][i], flower[b][i]);
-        int xr = flower_from[b][g[b][pa[b]].u], pr = get_pr(b, xr);
-        for (int i = 0; i < pr; i += 2) {
-            int xs = flower[b][i], xns = flower[b][i + 1];
-            pa[xs] = g[xns][xs].u;
-            S[xs] = 1, S[xns] = 0;
-            slack[xs] = 0, set_slack(xns);
-            q_push(xns);
-        }
-        S[xr] = 1, pa[xr] = pa[b];
-        for (int i = pr + 1; i < (int)flower[b].size(); ++i) {
-            int xs = flower[b][i];
-            S[xs] = -1, set_slack(xs);
-        }
-        st[b] = 0;
-    }
-    inline bool on_found_edge(const edge &e) {
-        int u = st[e.u], v = st[e.v];
-        if (S[v] == -1) {
-            pa[v] = e.u, S[v] = 1;
-            int nu = st[match[v]];
-            slack[v] = slack[nu] = 0;
-            S[nu] = 0, q_push(nu);
-        } else if (S[v] == 0) {
-            int lca = get_lca(u, v);
-            if (!lca) return augment(u, v), augment(v, u), 1;
-            else add_blossom(u, lca, v);
-        }
-        return 0;
-    }
-    inline bool matching() {
-        fill(S, S + n_x + 1, -1), fill(slack, slack + n_x + 1, 0);
-        q.clear();
-        for (int x = 1; x <= n_x; ++x) {
-            if (st[x] == x && !match[x]) pa[x] = 0, S[x] = 0, q_push(x);
-        }
-        if (q.empty()) return 0;
-        for (;;) {
-            while ((int)q.size()) {
-                int u = q.front();
-                q.pop_front();
-                if (S[st[u]] == 1) continue;
-                for (int v = 1; v <= n; ++v) {
-                    if (g[u][v].w > 0 && st[u] != st[v]) {
-                        if (dist(g[u][v]) == 0) {
-                            if (on_found_edge(g[u][v])) return 1;
-                        } else update_slack(u, st[v]);
-                    }
-                }
-            }
-            long long d = inf;
-            for (int b = n + 1; b <= n_x; ++b) {
-                if (st[b] == b && S[b] == 1) d = min(d, lab[b] / 2);
-            }
-            for (int x = 1; x <= n_x; ++x) {
-                if (st[x] == x && slack[x]) {
-                    if (S[x] == -1) d = min(d, dist(g[slack[x]][x]));
-                    else if (S[x] == 0) d = min(d, dist(g[slack[x]][x]) / 2);
-                }
-            }
-            for (int u = 1; u <= n; ++u) {
-                if (S[st[u]] == 0) {
-                    if (lab[u] <= d) return 0;
-                    lab[u] -= d;
-                } else if (S[st[u]] == 1) lab[u] += d;
-            }
-            for (int b = n + 1; b <= n_x; ++b) {
-                if (st[b] == b) {
-                    if (S[st[b]] == 0) lab[b] += d * 2;
-                    else if (S[st[b]] == 1) lab[b] -= d * 2;
-                }
-            }
-            q.clear();
-            for (int x = 1; x <= n_x; ++x) {
-                if (st[x] == x && slack[x] && st[slack[x]] != x && dist(g[slack[x]][x]) == 0)
-                    if (on_found_edge(g[slack[x]][x])) return 1;
-            }
-            for (int b = n + 1; b <= n_x; ++b) {
-                if (st[b] == b && S[b] == 1 && lab[b] == 0) expand_blossom(b);
-            }
-        }
-        return 0;
-    }
-    pair<long long, int> solve() {
-        fill(match, match + n + 1, 0);
-        n_x = n;
-        int cnt = 0;
-        long long ans = 0;
-        for (int u = 0; u <= n; ++u) st[u] = u, flower[u].clear();
-        long long w_max = 0;
-        for (int u = 1; u <= n; ++u) {
-            for (int v = 1; v <= n; ++v) {
-                flower_from[u][v] = (u == v ? u : 0);
-                w_max = max(w_max, g[u][v].w);
-            }
-        }
-        for (int u = 1; u <= n; ++u) lab[u] = w_max;
-        while (matching()) ++cnt;
-        for (int u = 1; u <= n; ++u) {
-            if (match[u] && match[u] < u) ans += g[u][match[u]].w;
-        }
-        for (int i = 0; i < n; ++i)
-            match[i] = match[i + 1] - 1;
-        return make_pair(ans, cnt);
-    }
-};
+    return false;
+  }
+  /* SPLIT_HASH_HERE */
+  bool matching() {
+    for(auto &x : S)
+      x = -1;
+    for(auto &x : slack)
+      x = 0;
 
-/*
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    int n, m;
-    cin >> n >> m;
-    Blossom g(n);
-    for (int i = 0; i < m; ++i) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        g.add_edge(u-1, v-1, w); 
-        // pass 0-based index here.
+    q = queue<int>();
+    REP(x, 1, nx) if(st[x] == x && !match[x]) pa[x] = 0, S[x] = 0, q_push(x);
+    if(q.empty())
+      return false;
+    for(;;) {
+      while(q.size()) {
+        int u = q.front();
+        q.pop();
+        if(S[st[u]] == 1)
+          continue;
+        REP(v, 1, n)
+        if(g[u][v].w > 0 && st[u] != st[v]) {
+          if(ED(g[u][v]) != 0)
+            update_slack(u, st[v], slack[st[v]]);
+          else if(on_found_edge(g[u][v]))
+            return true;
+        }
+      }
+      int d = inf;
+      REP(b, n + 1, nx) if(st[b] == b && S[b] == 1) d = min(d, lab[b] / 2);
+      REP(x, 1, nx)
+      if(int s = slack[x]; st[x] == x && s && S[x] <= 0)
+        d = min(d, ED(g[s][x]) / (S[x] + 2));
+      REP(u, 1, n)
+      if(S[st[u]] == 1)
+        lab[u] += d;
+      else if(S[st[u]] == 0) {
+        if(lab[u] <= d)
+          return false;
+        lab[u] -= d;
+      }
+      REP(b, n + 1, nx)
+      if(st[b] == b && S[b] >= 0)
+        lab[b] += d * (2 - 4 * S[b]);
+      REP(x, 1, nx)
+      if(int s = slack[x]; st[x] == x && s && st[s] != x && ED(g[s][x]) == 0)
+        if(on_found_edge(g[s][x]))
+          return true;
+      REP(b, n + 1, nx)
+      if(st[b] == b && S[b] == 1 && lab[b] == 0)
+        expand_blossom(b);
     }
-    auto ans = g.solve();  
-    // {max_weight, matching size}
-    cout << ans.second << ' ' << ans.first << '\n';
-    for (int i = 0; i < n; ++i) {
-        if (g.match[i] > i) cout << i+1 << ' ' << g.match[i]+1 << '\n';     // print 1-based index.
+    return false;
+  }
+  pair<lld, int> solve() {
+    for(auto &x : match)
+      x = 0;
+    REP(u, 0, n) st[u] = u, flo[u].clear();
+    int w_max = 0;
+    REP(u, 1, n) REP(v, 1, n) {
+      flo_from[u][v] = (u == v ? u : 0);
+      w_max = max(w_max, g[u][v].w);
     }
-}
-*/
+    REP(u, 1, n) lab[u] = w_max;
+    int n_matches = 0;
+    lld tot_weight = 0;
+    while(matching())
+      ++n_matches;
+    REP(u, 1, n) if(match[u] && match[u] < u) tot_weight += g[u][match[u]].w;
+    return make_pair(tot_weight, n_matches);
+  }
+  void set_edge(int u, int v, int w) { g[u][v].w = g[v][u].w = w; }
+};
