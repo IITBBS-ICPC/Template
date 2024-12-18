@@ -13,7 +13,7 @@ struct Vertex {
         fill(begin(next), end(next), -1);
     }
 };
-vector<Vertex> t;   
+vector<Vertex> t(1);   
 // Automation is stored in form of vector. 
 
 // Add String s to the automaton.
