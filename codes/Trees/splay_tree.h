@@ -16,59 +16,58 @@ struct node { // 0 based indexing
     // Init lazy
   }
   bool hasLazy() { // Define when lazy is present }
-};
+  };
 
-node nodes[N] = {node()};
-int tp = 1;
+  node nodes[N] = {node()};
+  int tp = 1;
 
-int createNode(int v) {
-  nodes[tp] = node(v);
-  return tp++;
-}
+  int createNode(int v) {
+    nodes[tp] = node(v);
+    return tp++;
+  }
 
-int createNode() {
-  nodes[tp] = node();
-  return tp++;
-}
+  int createNode() {
+    nodes[tp] = node();
+    return tp++;
+  }
 
-struct SplayTree {
-  int root;
+  struct SplayTree {
+    int root;
 
-  void build(vector<int> &arr) {
-    root = createNode(0);
-    nodes[root].r = createNode(0);
-    nodes[nodes[root].r].p = root;
+    void build(vector<int> &arr) {
+      root = createNode(0);
+      nodes[root].r = createNode(0);
+      nodes[nodes[root].r].p = root;
 
-    vector<int> stk = {nodes[root].r};
-    int curr;
-    for(auto x : arr) {
-      curr = nodes[stk.back()].r = createNode(x);
+      vector<int> stk = {nodes[root].r};
+      int curr;
+      for(auto x : arr) {
+        curr = nodes[stk.back()].r = createNode(x);
+        nodes[curr].p = stk.back();
+        stk.push_back(curr);
+      }
+      curr = nodes[stk.back()].r = createNode(0);
       nodes[curr].p = stk.back();
-      stk.push_back(curr);
+
+      while(stk.size()) {
+        pull(stk.back());
+        stk.pop_back();
+      }
     }
-    curr = nodes[stk.back()].r = createNode(0);
-    nodes[curr].p = stk.back();
 
-    while(stk.size()) {
-      pull(stk.back());
-      stk.pop_back();
+    void flip(int v) {
+      if(v)
+        nodes[v].flip ^= 1;
     }
-  }
 
-  void flip(int v) {
-    if(v)
-      nodes[v].flip ^= 1;
-  }
+    void lazyEval(int v){// Evaluate lazy to actual value}
 
-  void lazyEval(int v) {// Evaluate lazy to actual value}
-
-  void lazyApply(int v, int b, int c) {
-    if(!v)
-      return;
+                         void lazyApply(int v, int b, int c){if(!v) return;
     // Merge Lazy updates
   }
 
-  void push(int v) {
+  void
+  push(int v) {
     if(nodes[v].flip) {
       swap(nodes[v].l, nodes[v].r);
 

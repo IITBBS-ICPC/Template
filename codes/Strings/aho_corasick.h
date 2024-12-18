@@ -8,11 +8,9 @@ struct Vertex {
     int p = -1;
     char pch;
     int link = -1;
-    int go[K];      
 
     Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
         fill(begin(next), end(next), -1);
-        fill(begin(go), end(go), -1);
     }
 };
 vector<Vertex> t;   
@@ -49,14 +47,12 @@ int get_link(int v) {
 int go(int v, char ch) {
     int c = ch - 'a'; 
     // May change if not lowercase alphabet
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : 
-                            go(get_link(v), ch);
-    }
-    return t[v].go[c];
+    
+    if (t[v].next[c] == -1)        
+        t[v].next[c] = v == 0 ? 0 : 
+                        go(get_link(v), ch);
+    
+    return t[v].next[c];
 } 
 
 // To calculate links and leafs(exit link) for nodes.
