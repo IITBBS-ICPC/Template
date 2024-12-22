@@ -1,0 +1,25 @@
+{
+  "files.associations": {
+    "random": "cpp",
+    "deque": "cpp",
+    "forward_list": "cpp",
+    "list": "cpp",
+    "string": "cpp",
+    "valarray": "cpp",
+    "vector": "cpp",
+    "*.tcc": "cpp",
+    "any": "cpp",
+    "bitset": "cpp",
+    "compare": "cpp",
+    "coroutine": "cpp",
+    "expected": "cpp",
+    "limits": "cpp",
+    "memory": "cpp",
+    "optional": "cpp",
+    "ranges": "cpp",
+    "ratio": "cpp",
+    "type_traits": "cpp",
+    "utility": "cpp",
+    "variant": "cpp"
+  }
+}

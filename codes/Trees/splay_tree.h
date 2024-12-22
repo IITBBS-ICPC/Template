@@ -1,73 +1,63 @@
-const int N = 1e6 + 10;
-const int M = 998244353;
-
 struct node { // 0 based indexing
   int l, r, p, val;
-
   // Lazy Values
   int flip, sum, cnt;
-
   node() : node(0) { cnt = 0; }
-
   node(int v) {
-    sum = val = v;
-    flip = false;
-    l = r = p = 0;
+    sum = val = v, flip = false, l = r = p = 0;
     // Init lazy
   }
-  bool hasLazy() { // Define when lazy is present }
-  };
+  bool hasLazy() {}
+};
 
-  node nodes[N] = {node()};
-  int tp = 1;
+node nodes[N] = {node()};
+int tp = 1;
 
-  int createNode(int v) {
-    nodes[tp] = node(v);
-    return tp++;
-  }
+int createNode(int v) {
+  nodes[tp] = node(v);
+  return tp++;
+}
 
-  int createNode() {
-    nodes[tp] = node();
-    return tp++;
-  }
+int createNode() {
+  nodes[tp] = node();
+  return tp++;
+}
 
-  struct SplayTree {
-    int root;
+struct SplayTree {
+  int root;
 
-    void build(vector<int> &arr) {
-      root = createNode(0);
-      nodes[root].r = createNode(0);
-      nodes[nodes[root].r].p = root;
+  void build(vector<int> &arr) {
+    root = createNode(0);
+    nodes[root].r = createNode(0);
+    nodes[nodes[root].r].p = root;
 
-      vector<int> stk = {nodes[root].r};
-      int curr;
-      for(auto x : arr) {
-        curr = nodes[stk.back()].r = createNode(x);
-        nodes[curr].p = stk.back();
-        stk.push_back(curr);
-      }
-      curr = nodes[stk.back()].r = createNode(0);
+    vector<int> stk = {nodes[root].r};
+    int curr;
+    for(auto x : arr) {
+      curr = nodes[stk.back()].r = createNode(x);
       nodes[curr].p = stk.back();
-
-      while(stk.size()) {
-        pull(stk.back());
-        stk.pop_back();
-      }
+      stk.push_back(curr);
     }
+    curr = nodes[stk.back()].r = createNode(0);
+    nodes[curr].p = stk.back();
 
-    void flip(int v) {
-      if(v)
-        nodes[v].flip ^= 1;
+    while(stk.size()) {
+      pull(stk.back());
+      stk.pop_back();
     }
-
-    void lazyEval(int v){// Evaluate lazy to actual value}
-
-                         void lazyApply(int v, int b, int c){if(!v) return;
-    // Merge Lazy updates
   }
 
-  void
-  push(int v) {
+  void flip(int v) {
+    if(v) nodes[v].flip ^= 1;
+  }
+
+  void lazyEval(int v) {}
+
+  void lazyApply(int v, int b, int c) {
+    if(!v) return;
+  }
+
+  void push(int v) {
     if(nodes[v].flip) {
       swap(nodes[v].l, nodes[v].r);
 
@@ -85,19 +75,13 @@ struct node { // 0 based indexing
   }
 
   void pull(int v) {
-    if(nodes[v].r)
-      push(nodes[v].r);
-    if(nodes[v].l)
-      push(nodes[v].l);
-
-    // Re-evaluate node
+    if(nodes[v].r) push(nodes[v].r);
+    if(nodes[v].l) push(nodes[v].l);
   }
 
   void rotate(int v) {
     int p = nodes[v].p;
-    if(!p) {
-      return;
-    }
+    if(!p) { return; }
     int pp = nodes[p].p;
 
     if(nodes[p].l == v) {
@@ -116,8 +100,7 @@ struct node { // 0 based indexing
       nodes[nodes[p].r].p = p;
     }
 
-    if(nodes[pp].r == p)
-      nodes[pp].r = v;
+    if(nodes[pp].r == p) nodes[pp].r = v;
     else
       nodes[pp].l = v;
   }
@@ -164,15 +147,13 @@ struct node { // 0 based indexing
       pull(pp);
       pull(p);
       pull(v);
-      if(pp == _root)
-        break;
+      if(pp == _root) break;
     }
   }
 
   int findAndSplay(int ind, int root) {
     int v = find(ind, root);
-    if(!v)
-      return v;
+    if(!v) return v;
     splay(v, root);
     return v;
   }

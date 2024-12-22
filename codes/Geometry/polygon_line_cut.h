@@ -1,5 +1,3 @@
-// https://anurudhp.github.io/blogs/2021/11/12/icpc-wf-2020-domes.html
-
 template <class T>
 bool isZero(T x) { return x == 0; }
 

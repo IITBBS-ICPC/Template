@@ -13,15 +13,18 @@ struct WeightGraph { // 1-based
   vector<vector<int>> flo, flo_from;
   queue<int> q;
   WeightGraph(int n_)
-      : n(n_), nx(n * 2), lab(nx + 1), g(nx + 1, vector<edge>(nx + 1)),
-        slack(nx + 1), flo(nx + 1), flo_from(nx + 1, vector(n + 1, 0)) {
+      : n(n_), nx(n * 2), lab(nx + 1),
+        g(nx + 1, vector<edge>(nx + 1)), slack(nx + 1),
+        flo(nx + 1),
+        flo_from(nx + 1, vector(n + 1, 0)) {
     match = st = pa = S = vis = slack;
     REP(u, 1, n) REP(v, 1, n) g[u][v] = {u, v, 0};
   }
-  int ED(edge e) { return lab[e.u] + lab[e.v] - g[e.u][e.v].w * 2; }
+  int ED(edge e) {
+    return lab[e.u] + lab[e.v] - g[e.u][e.v].w * 2;
+  }
   void update_slack(int u, int x, int &s) {
-    if(!s || ED(g[u][x]) < ED(g[s][x]))
-      s = u;
+    if(!s || ED(g[u][x]) < ED(g[s][x])) s = u;
   }
   void set_slack(int x) {
     slack[x] = 0;
@@ -30,8 +33,7 @@ struct WeightGraph { // 1-based
       update_slack(u, x, slack[x]);
   }
   void q_push(int x) {
-    if(x <= n)
-      q.push(x);
+    if(x <= n) q.push(x);
     else
       for(int y : flo[x])
         q_push(y);
@@ -51,11 +53,11 @@ struct WeightGraph { // 1-based
   }
   void set_match(int u, int v) {
     match[u] = g[u][v].v;
-    if(u <= n)
-      return;
+    if(u <= n) return;
     int xr = flo_from[u][g[u][v].u];
     auto &f = flo[u], z = split_flo(f, xr);
-    REP(i, 0, int(z.size()) - 1) set_match(z[i], z[i ^ 1]);
+    REP(i, 0, int(z.size()) - 1)
+    set_match(z[i], z[i ^ 1]);
     set_match(xr, v);
     f.insert(f.end(), all(z));
   }
@@ -63,8 +65,7 @@ struct WeightGraph { // 1-based
     for(;;) {
       int xnv = st[match[u]];
       set_match(u, v);
-      if(!xnv)
-        return;
+      if(!xnv) return;
       set_match(v = xnv, u = st[pa[xnv]]);
     }
   }
@@ -74,12 +75,10 @@ struct WeightGraph { // 1-based
     ++t;
     for(++t; u || v; swap(u, v))
       if(u) {
-        if(vis[u] == t)
-          return u;
+        if(vis[u] == t) return u;
         vis[u] = t;
         u = st[match[u]];
-        if(u)
-          u = st[pa[u]];
+        if(u) u = st[pa[u]];
       }
     return 0;
   }
@@ -90,7 +89,8 @@ struct WeightGraph { // 1-based
     vector<int> f = {o};
     for(int x : {u, v}) {
       for(int y; x != o; x = st[pa[y]])
-        f.emplace_back(x), f.emplace_back(y = st[match[x]]), q_push(y);
+        f.emplace_back(x),
+          f.emplace_back(y = st[match[x]]), q_push(y);
       reverse(1 + all(f));
     }
     flo[b] = f;
@@ -102,8 +102,7 @@ struct WeightGraph { // 1-based
       if(g[b][x].w == 0 || ED(g[xs][x]) < ED(g[b][x]))
         g[b][x] = g[xs][x], g[x][b] = g[x][xs];
       REP(x, 1, n)
-      if(flo_from[xs][x])
-        flo_from[b][x] = xs;
+      if(flo_from[xs][x]) flo_from[b][x] = xs;
     }
     set_slack(b);
   }
@@ -124,8 +123,7 @@ struct WeightGraph { // 1-based
       xs = -1;
     }
     for(int x : flo[b])
-      if(x == xr)
-        S[x] = 1, pa[x] = pa[b];
+      if(x == xr) S[x] = 1, pa[x] = pa[b];
       else
         S[x] = -1, set_slack(x);
     st[b] = 0;
@@ -139,8 +137,7 @@ struct WeightGraph { // 1-based
       S[nu] = 0;
       q_push(nu);
     } else if(S[v] == 0) {
-      if(int o = lca(u, v))
-        add_blossom(u, o, v);
+      if(int o = lca(u, v)) add_blossom(u, o, v);
       else
         return augment(u, v), augment(v, u), true;
     }
@@ -154,15 +151,15 @@ struct WeightGraph { // 1-based
       x = 0;
 
     q = queue<int>();
-    REP(x, 1, nx) if(st[x] == x && !match[x]) pa[x] = 0, S[x] = 0, q_push(x);
-    if(q.empty())
-      return false;
+    REP(x, 1, nx)
+    if(st[x] == x && !match[x]) pa[x] = 0,
+                                S[x] = 0, q_push(x);
+    if(q.empty()) return false;
     for(;;) {
       while(q.size()) {
         int u = q.front();
         q.pop();
-        if(S[st[u]] == 1)
-          continue;
+        if(S[st[u]] == 1) continue;
         REP(v, 1, n)
         if(g[u][v].w > 0 && st[u] != st[v]) {
           if(ED(g[u][v]) != 0)
@@ -172,25 +169,25 @@ struct WeightGraph { // 1-based
         }
       }
       int d = inf;
-      REP(b, n + 1, nx) if(st[b] == b && S[b] == 1) d = min(d, lab[b] / 2);
+      REP(b, n + 1, nx)
+      if(st[b] == b && S[b] == 1) d
+        = min(d, lab[b] / 2);
       REP(x, 1, nx)
       if(int s = slack[x]; st[x] == x && s && S[x] <= 0)
         d = min(d, ED(g[s][x]) / (S[x] + 2));
       REP(u, 1, n)
-      if(S[st[u]] == 1)
-        lab[u] += d;
+      if(S[st[u]] == 1) lab[u] += d;
       else if(S[st[u]] == 0) {
-        if(lab[u] <= d)
-          return false;
+        if(lab[u] <= d) return false;
         lab[u] -= d;
       }
       REP(b, n + 1, nx)
       if(st[b] == b && S[b] >= 0)
         lab[b] += d * (2 - 4 * S[b]);
       REP(x, 1, nx)
-      if(int s = slack[x]; st[x] == x && s && st[s] != x && ED(g[s][x]) == 0)
-        if(on_found_edge(g[s][x]))
-          return true;
+      if(int s = slack[x]; st[x] == x && s && st[s] != x
+                           && ED(g[s][x]) == 0)
+        if(on_found_edge(g[s][x])) return true;
       REP(b, n + 1, nx)
       if(st[b] == b && S[b] == 1 && lab[b] == 0)
         expand_blossom(b);
@@ -211,8 +208,12 @@ struct WeightGraph { // 1-based
     lld tot_weight = 0;
     while(matching())
       ++n_matches;
-    REP(u, 1, n) if(match[u] && match[u] < u) tot_weight += g[u][match[u]].w;
+    REP(u, 1, n)
+    if(match[u] && match[u] < u) tot_weight
+      += g[u][match[u]].w;
     return make_pair(tot_weight, n_matches);
   }
-  void set_edge(int u, int v, int w) { g[u][v].w = g[v][u].w = w; }
+  void set_edge(int u, int v, int w) {
+    g[u][v].w = g[v][u].w = w;
+  }
 };

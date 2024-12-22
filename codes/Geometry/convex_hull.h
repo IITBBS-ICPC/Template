@@ -22,7 +22,7 @@ double area(const vector<pt> &poly) {
         pt p = i ? poly[i-1] :poly.back();
         pt q = poly[i];
         
-        area += (p.x - q.x) * (p.y - q.y) ;
+        area += p.x * q.y - p.y * q.x;
     }
     area = fabs(area)/2;
     return area ;
