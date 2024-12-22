@@ -50,13 +50,13 @@
 \lhead{}
 \rhead{}
 %team name
-\chead{Three Musketeers, IIT Bhubaneswar}
+\chead{Fast and Fourier, IIT Bhubaneswar}
 \cfoot{}
 \tableofcontents
 \end{titlepage}
 
 \pagestyle{fancy}
 %team name
-\chead{Three Musketeers, IIT Bhubaneswar}
+\chead{Fast and Fourier, IIT Bhubaneswar}
 \cfoot{- \thepage \ -}
   
