@@ -1,10 +1,7 @@
 const static int K = 26;
-// Will change if input is not just lowercase alphabets
 struct Vertex {
   int next[K];
   int leaf = 0;
-  // It actually denotes number of leafs reachable
-  // from current vertexes using links.
   int p = -1;
   char pch;
   int link = -1;
@@ -14,9 +11,6 @@ struct Vertex {
   }
 };
 vector<Vertex> t(1);
-// Automation is stored in form of vector.
-
-// Add String s to the automaton.
 void add_s(string const &s) {
   int v = 0;
   for(char ch : s) {
@@ -29,11 +23,7 @@ void add_s(string const &s) {
   }
   t[v].leaf += 1;
 }
-
-// Forward declaration of functions
 int go(int v, char ch);
-
-// gets the link from vertex v.
 int get_link(int v) {
   if(t[v].link == -1) {
     if(v == 0 || t[v].p == 0) t[v].link = 0;
@@ -42,18 +32,12 @@ int get_link(int v) {
   }
   return t[v].link;
 }
-
 int go(int v, char ch) {
   int c = ch - 'a';
-  // May change if not lowercase alphabet
-
   if(t[v].next[c] == -1)
     t[v].next[c] = v == 0 ? 0 : go(get_link(v), ch);
-
   return t[v].next[c];
 }
-
-// To calculate links and leafs(exit link) for nodes.
 void bfs() {
   queue<int> order;
   order.push(0);

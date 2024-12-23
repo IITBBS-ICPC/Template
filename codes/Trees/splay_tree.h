@@ -9,28 +9,22 @@ struct node { // 0 based indexing
   }
   bool hasLazy() {}
 };
-
 node nodes[N] = {node()};
 int tp = 1;
-
 int createNode(int v) {
   nodes[tp] = node(v);
   return tp++;
 }
-
 int createNode() {
   nodes[tp] = node();
   return tp++;
 }
-
 struct SplayTree {
   int root;
-
   void build(vector<int> &arr) {
     root = createNode(0);
     nodes[root].r = createNode(0);
     nodes[nodes[root].r].p = root;
-
     vector<int> stk = {nodes[root].r};
     int curr;
     for(auto x : arr) {
@@ -40,23 +34,18 @@ struct SplayTree {
     }
     curr = nodes[stk.back()].r = createNode(0);
     nodes[curr].p = stk.back();
-
     while(stk.size()) {
       pull(stk.back());
       stk.pop_back();
     }
   }
-
   void flip(int v) {
     if(v) nodes[v].flip ^= 1;
   }
-
   void lazyEval(int v) {}
-
   void lazyApply(int v, int b, int c) {
     if(!v) return;
   }
-
   void push(int v) {
     if(nodes[v].flip) {
       swap(nodes[v].l, nodes[v].r);
@@ -73,12 +62,10 @@ struct SplayTree {
       lazyEval(v);
     }
   }
-
   void pull(int v) {
     if(nodes[v].r) push(nodes[v].r);
     if(nodes[v].l) push(nodes[v].l);
   }
-
   void rotate(int v) {
     int p = nodes[v].p;
     if(!p) { return; }
@@ -104,7 +91,6 @@ struct SplayTree {
     else
       nodes[pp].l = v;
   }
-
   int find(int ind, int root) {
     int v = root;
     while(v) {
@@ -123,7 +109,6 @@ struct SplayTree {
     }
     return v;
   }
-
   void splay(int v, int _root) {
     int cnt = 0;
     while(v != _root) {
@@ -150,14 +135,12 @@ struct SplayTree {
       if(pp == _root) break;
     }
   }
-
   int findAndSplay(int ind, int root) {
     int v = find(ind, root);
     if(!v) return v;
     splay(v, root);
     return v;
   }
-
   node query(int l, int r) {
     l += 1, r += 1;
     int v = findAndSplay(l, nodes[root].r);
@@ -165,14 +148,12 @@ struct SplayTree {
     push(nodes[u].l);
     return nodes[nodes[u].l];
   }
-
   void reverse(int l, int r) {
     l += 1, r += 1;
     int v = findAndSplay(l, nodes[root].r);
     int u = findAndSplay(r - l + 2, nodes[v].r);
     flip(nodes[u].l);
   }
-
   void update(int l, int r, int b, int c) {
     l += 1, r += 1;
     int v = findAndSplay(l, nodes[root].r);
@@ -181,7 +162,6 @@ struct SplayTree {
     pull(u);
     pull(v);
   }
-
   void insert(int ind, int x) {
     ind++;
     int v = findAndSplay(ind, nodes[root].r);
@@ -191,7 +171,6 @@ struct SplayTree {
     pull(u);
     pull(v);
   }
-
   void remove(int ind) {
     ind++;
     int v = findAndSplay(ind, nodes[root].r);
