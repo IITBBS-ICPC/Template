@@ -3,98 +3,76 @@ Implementation of Dinic's blocking algorithm
 for the maximum flow.
 Complexity: V^2 E (faster on real graphs).
 
-please add edges not related to input first 
+please add edges not related to input first
 to improve constants
 
-This class accepts a graph 
+This class accepts a graph
 (costructed calling AddEdge) and then solves
-the maximum flow problem for any source and sink. 
+the maximum flow problem for any source and sink.
 
 Both directed and undirected graphs are supported.
-In case of undirected graphs, 
+In case of undirected graphs,
 each edge must be added twice.
 
-To compute the maximum flow just call 
+To compute the maximum flow just call
 GetMaxFlowValue(source, sink).
 */
 
-template <typename T>
-struct Dinic {
-    struct Edge {
-        int u, v;
-        T cap, flow;
-        Edge() {}
-        Edge(int u, int v, T cap): u(u), v(v), cap(cap), flow(0) {}
-    };
-
-    int N;
-    vector<Edge> edges; // The "inverse" edge of edges[i] is edges[i^1].
-    vector<vector<int>> aa; // Stores the index of the edge in the edges vector.
-    // dist is the distance in the bfs.
-    // pt is used internally to save time in the dfs.
-    vector<int> dist, pt;
-
-    Dinic(int N): N(N), edges(0), aa(N), dist(N), pt(N) {}
-
-    void AddEdge(int u, int v, T cap) {
-        assert(0 <= u and u < N);
-        assert(0 <= v and v < N);
-        // dbg(u, v, cap);
-        if (u != v) {
-            edges.push_back(Edge(u, v, cap));
-            aa[u].push_back(edges.size() - 1);
-            // The inverse edge has 0 capacity.
-            edges.push_back(Edge(v, u, 0));
-            aa[v].push_back(edges.size() - 1);
-        }
+// Flow data type
+using T = int;
+struct Edge {
+  int u, v;
+  T cap, flow;
+};
+// Define object globally with limits on number of
+// vertices an edges (N, M) as templates
+template <int N, int M> struct Dinic {
+  T inf = 1e9;
+  int esz = 0, n, lev[N], ptr[N];
+  Edge es[2 * M];
+  vector<int> adj[N];
+  void init(int _n) { n = _n; }
+  void addEdge(int u, int v, int cap) {
+    es[esz] = {u, v, cap, 0};
+    es[esz + 1] = {v, u, 0, 0};
+    adj[u].push_back(esz);
+    adj[v].push_back(esz + 1);
+    esz += 2;
+  }
+  bool bfs(int s, int t) {
+    memset(lev, -1, N * sizeof(int));
+    queue<int> q;
+    q.push(s), lev[s] = 0;
+    while(q.size()) {
+      int v = q.front();
+      q.pop();
+      for(int x : adj[v]) {
+        Edge &e = es[x];
+        if(e.cap > e.flow && lev[e.v] == -1)
+          lev[e.v] = lev[e.u] + 1, q.push(e.v);
+      }
     }
-
-    // Computes all distances from source and stores them in dist.
-    // It returns true if sink is reachable from source.
-    bool BFS(int source, int sink) {
-        queue<int> q({source});
-        fill(dist.begin(), dist.end(), N + 1);
-        dist[source] = 0;
-        while(!q.empty()) {
-            int u = q.front(); q.pop();
-            if (u == sink) break;
-            for (int k : aa[u]) {
-                Edge &e = edges[k];
-                if (e.flow < e.cap && dist[e.v] > dist[e.u] + 1) {
-                    dist[e.v] = dist[e.u] + 1;
-                    q.push(e.v);
-                }
-            }
-        }
-        return dist[sink] != N + 1;
+    return lev[t] != -1;
+  }
+  T dfs(int v, int t, T pf) {
+    if(v == t || !pf) return pf;
+    T f = 0;
+    for(int &i = ptr[v]; i < adj[v].size(); i++) {
+      int ind = adj[v][i];
+      Edge &e = es[ind], &re = es[ind ^ 1];
+      if(lev[e.u] != lev[e.v] - 1) continue;
+      T tf = dfs(e.v, t, min(pf - f, e.cap - e.flow));
+      f += tf, e.flow += tf, re.flow -= tf;
+      if(f == pf) return f;
     }
-
-    T DFS(int u, int sink, T flow = -1) {
-        if (u == sink || flow == 0) return flow;
-        // ACHTUNG: Be careful of using references (&) where needed!
-        for (int &i = pt[u]; i < (int)aa[u].size(); i++) {
-            Edge &e = edges[aa[u][i]];
-            Edge &oe = edges[aa[u][i] ^ 1];
-            if (dist[e.v] == dist[e.u] + 1) {
-                T amt = e.cap - e.flow;
-                if (flow != -1 && amt > flow) amt = flow;
-                if (T pushed = DFS(e.v, sink, amt)) {
-                    e.flow += pushed;
-                    oe.flow -= pushed;
-                    return pushed;
-                }
-            }
-        }
-        return 0;
+    return f;
+  }
+  T calc(int s, int t) {
+    T f = 0;
+    while(bfs(s, t)) {
+      memset(ptr, 0, N * sizeof(int));
+      f += dfs(s, t, inf);
     }
-
-    T GetMaxFlowValue(int source, int sink) {
-        for (Edge& e : edges) e.flow = 0;
-        T res = 0;
-        while (BFS(source, sink)) {
-            fill(pt.begin(), pt.end(), 0);
-            while (T flow = DFS(source, sink)) res += flow;
-        }
-        return res;
-    }
+    return f;
+  }
 };
