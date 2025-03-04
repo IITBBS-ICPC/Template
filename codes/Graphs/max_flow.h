@@ -19,6 +19,7 @@ GetMaxFlowValue(source, sink).
 */
 
 // Flow data type
+#define pb push_back
 using T = int;
 struct Edge {
   int u, v;
@@ -28,39 +29,39 @@ struct Edge {
 // vertices an edges (N, M) as templates
 template <int N, int M> struct Dinic {
   T inf = 1e9;
-  int esz = 0, n, lev[N], ptr[N];
-  Edge es[2 * M];
-  vector<int> adj[N];
+  int esz = 0, n, level[N], ptr[N];
+  Edge edge[2 * M];
+  vector<int> g[N];
   void init(int _n) { n = _n; }
   void addEdge(int u, int v, int cap) {
-    es[esz] = {u, v, cap, 0};
-    es[esz + 1] = {v, u, 0, 0};
-    adj[u].push_back(esz);
-    adj[v].push_back(esz + 1);
+    edge[esz] = {u, v, cap, 0};
+    edge[esz + 1] = {v, u, 0, 0};
+    g[u].pb(esz);
+    g[v].pb(esz + 1);
     esz += 2;
   }
   bool bfs(int s, int t) {
-    memset(lev, -1, N * sizeof(int));
+    memset(level, -1, N * 4);
     queue<int> q;
-    q.push(s), lev[s] = 0;
+    q.push(s), level[s] = 0;
     while(q.size()) {
       int v = q.front();
       q.pop();
-      for(int x : adj[v]) {
-        Edge &e = es[x];
-        if(e.cap > e.flow && lev[e.v] == -1)
-          lev[e.v] = lev[e.u] + 1, q.push(e.v);
+      for(int x : g[v]) {
+        Edge &e = edge[x];
+        if(e.cap > e.flow && level[e.v] == -1)
+          level[e.v] = level[e.u] + 1, q.push(e.v);
       }
     }
-    return lev[t] != -1;
+    return level[t] != -1;
   }
   T dfs(int v, int t, T pf) {
     if(v == t || !pf) return pf;
     T f = 0;
-    for(int &i = ptr[v]; i < adj[v].size(); i++) {
-      int ind = adj[v][i];
-      Edge &e = es[ind], &re = es[ind ^ 1];
-      if(lev[e.u] != lev[e.v] - 1) continue;
+    for(int &i = ptr[v]; i < g[v].size(); i++) {
+      int ind = g[v][i];
+      Edge &e = edge[ind], &re = edge[ind ^ 1];
+      if(level[e.u] != level[e.v] - 1) continue;
       T tf = dfs(e.v, t, min(pf - f, e.cap - e.flow));
       f += tf, e.flow += tf, re.flow -= tf;
       if(f == pf) return f;
@@ -70,7 +71,7 @@ template <int N, int M> struct Dinic {
   T calc(int s, int t) {
     T f = 0;
     while(bfs(s, t)) {
-      memset(ptr, 0, N * sizeof(int));
+      memset(ptr, 0, N * 4);
       f += dfs(s, t, inf);
     }
     return f;

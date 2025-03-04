@@ -28,7 +28,7 @@ Data &opr += (Data & a, const Upd &b) {
 struct Node {
   int par, child[4];
   Data path, sub, all, data;
-  Update plazy, slazy;
+  Upd plazy, slazy;
   bool flip, fake;
   Node()
       : par(0), child(), path(), sub(), all(), plazy(),
@@ -48,14 +48,14 @@ struct SplayTree {
     swap(T[u].child[0], T[u].child[1]);
     T[u].flip ^= true;
   }
-  void pushpath(int u, const Update &upd) {
+  void pushpath(int u, const Upd &upd) {
     if(!u || T[u].fake) return;
     T[u].data += upd;
     T[u].path += upd;
     T[u].all = T[u].path + T[u].sub;
     T[u].plazy += upd;
   }
-  void pushsub(int u, bool r, const Update &upd) {
+  void pushsub(int u, bool r, const Upd &upd) {
     if(!u) return;
     T[u].sub += upd;
     T[u].slazy += upd;
@@ -73,14 +73,14 @@ struct SplayTree {
     if(T[u].plazy.upd()) {
       pushpath(T[u].child[0], T[u].plazy);
       pushpath(T[u].child[1], T[u].plazy);
-      T[u].plazy = Update();
+      T[u].plazy = Upd();
     }
     if(T[u].slazy.upd()) {
       pushsub(T[u].child[0], false, T[u].slazy);
       pushsub(T[u].child[1], false, T[u].slazy);
       pushsub(T[u].child[2], true, T[u].slazy);
       pushsub(T[u].child[3], true, T[u].slazy);
-      T[u].slazy = Update();
+      T[u].slazy = Upd();
     }
   }
   void pull(int u) {
@@ -206,7 +206,7 @@ struct LinkCut : SplayTree {
     access(v);
     return T[v].path;
   }
-  void updatePath(int u, int v, Update upd) {
+  void updatePath(int u, int v, Upd upd) {
     reroot(u);
     access(v);
     pushpath(v, upd);
@@ -218,7 +218,7 @@ struct LinkCut : SplayTree {
       ret += T[T[v].child[i]].all;
     return ret;
   }
-  void updateSubtree(int v, Update upd) {
+  void updateSubtree(int v, Upd upd) {
     access(v);
     T[v].data += upd;
     for(int i = 2; i < 4; i++)
@@ -277,7 +277,7 @@ struct BBST : public SplayTree {
     auto [vl, vr] = compressRange(l, r);
     return T[T[vr].child[0]].path;
   }
-  void update(int l, int r, Update upd) {
+  void update(int l, int r, Upd upd) {
     auto [vl, vr] = compressRange(l, r);
     if(int u = T[vr].child[0]) {
       pushpath(u, upd);
