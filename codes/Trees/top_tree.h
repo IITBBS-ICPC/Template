@@ -11,7 +11,7 @@ struct Upd {
   bool upd() { return v; }
 };
 
-// Node combine, upd combine and upd apply definitions
+// node combine, upd combine and upd apply definitions
 Data opr + (const Data &a, const Data &b) {
   return Data(a.v + b.v);
 }
@@ -25,15 +25,15 @@ Data &opr += (Data & a, const Upd &b) {
   return a = Data(a.v + b.v);
 }
 
-struct Node {
+struct node {
   int par, child[4];
   Data path, sub, all, data;
   Upd plazy, slazy;
   bool flip, fake;
-  Node()
+  node()
       : par(0), child(), path(), sub(), all(), plazy(),
         slazy(), flip(false), fake(true) {}
-  Node(int v, int vp) : Node() {
+  node(int v, int vp) : node() {
     data = Data(v, vp);
     path = all = Data(data);
     fake = false;
@@ -41,87 +41,87 @@ struct Node {
 };
 // Splay Tree
 struct SplayTree {
-  vector<Node> T;
-  SplayTree(int n) : T(n) {}
+  vector<node> t;
+  SplayTree(int n) : t(n) {}
   void pushflip(int u) {
     if(!u) return;
-    swap(T[u].child[0], T[u].child[1]);
-    T[u].flip ^= true;
+    swap(t[u].child[0], t[u].child[1]);
+    t[u].flip ^= true;
   }
   void pushpath(int u, const Upd &upd) {
-    if(!u || T[u].fake) return;
-    T[u].data += upd;
-    T[u].path += upd;
-    T[u].all = T[u].path + T[u].sub;
-    T[u].plazy += upd;
+    if(!u || t[u].fake) return;
+    t[u].data += upd;
+    t[u].path += upd;
+    t[u].all = t[u].path + t[u].sub;
+    t[u].plazy += upd;
   }
   void pushsub(int u, bool r, const Upd &upd) {
     if(!u) return;
-    T[u].sub += upd;
-    T[u].slazy += upd;
-    if(!T[u].fake && r) pushpath(u, upd);
+    t[u].sub += upd;
+    t[u].slazy += upd;
+    if(!t[u].fake && r) pushpath(u, upd);
     else
-      T[u].all = T[u].path + T[u].sub;
+      t[u].all = t[u].path + t[u].sub;
   }
   void push(int u) {
     if(!u) return;
-    if(T[u].flip) {
-      pushflip(T[u].child[0]);
-      pushflip(T[u].child[1]);
-      T[u].flip = false;
+    if(t[u].flip) {
+      pushflip(t[u].child[0]);
+      pushflip(t[u].child[1]);
+      t[u].flip = false;
     }
-    if(T[u].plazy.upd()) {
-      pushpath(T[u].child[0], T[u].plazy);
-      pushpath(T[u].child[1], T[u].plazy);
-      T[u].plazy = Upd();
+    if(t[u].plazy.upd()) {
+      pushpath(t[u].child[0], t[u].plazy);
+      pushpath(t[u].child[1], t[u].plazy);
+      t[u].plazy = Upd();
     }
-    if(T[u].slazy.upd()) {
-      pushsub(T[u].child[0], false, T[u].slazy);
-      pushsub(T[u].child[1], false, T[u].slazy);
-      pushsub(T[u].child[2], true, T[u].slazy);
-      pushsub(T[u].child[3], true, T[u].slazy);
-      T[u].slazy = Upd();
+    if(t[u].slazy.upd()) {
+      pushsub(t[u].child[0], false, t[u].slazy);
+      pushsub(t[u].child[1], false, t[u].slazy);
+      pushsub(t[u].child[2], true, t[u].slazy);
+      pushsub(t[u].child[3], true, t[u].slazy);
+      t[u].slazy = Upd();
     }
   }
   void pull(int u) {
-    if(!T[u].fake)
-      T[u].path = T[T[u].child[0]].path + T[u].data
-                  + T[T[u].child[1]].path;
-    T[u].sub
-      = T[T[u].child[0]].sub + T[T[u].child[1]].sub
-        + T[T[u].child[2]].all + T[T[u].child[3]].all;
-    T[u].all = T[u].path + T[u].sub;
+    if(!t[u].fake)
+      t[u].path = t[t[u].child[0]].path + t[u].data
+                  + t[t[u].child[1]].path;
+    t[u].sub
+      = t[t[u].child[0]].sub + t[t[u].child[1]].sub
+        + t[t[u].child[2]].all + t[t[u].child[3]].all;
+    t[u].all = t[u].path + t[u].sub;
   }
   void attach(int u, int d, int v) {
-    T[u].child[d] = v;
-    T[v].par = u;
+    t[u].child[d] = v;
+    t[v].par = u;
     pull(u);
   }
   int dir(int u, int r) {
-    int v = T[u].par;
-    return T[v].child[r] == u       ? r
-           : T[v].child[r + 1] == u ? r + 1
+    int v = t[u].par;
+    return t[v].child[r] == u       ? r
+           : t[v].child[r + 1] == u ? r + 1
                                     : -1;
   }
   void rotate(int u, int r) {
-    int v = T[u].par, w = T[v].par, du = dir(u, r),
+    int v = t[u].par, w = t[v].par, du = dir(u, r),
         dv = dir(v, r);
     if(dv == -1 && r == 0) dv = dir(v, 2);
-    attach(v, du, T[u].child[du ^ 1]);
+    attach(v, du, t[u].child[du ^ 1]);
     attach(u, du ^ 1, v);
     if(~dv) attach(w, dv, u);
     else
-      T[u].par = w;
+      t[u].par = w;
   }
   void splay(int u, int r) {
     push(u);
-    while(~dir(u, r) && (r == 0 || T[T[u].par].fake)) {
-      int v = T[u].par, w = T[v].par;
+    while(~dir(u, r) && (r == 0 || t[t[u].par].fake)) {
+      int v = t[u].par, w = t[v].par;
       push(w);
       push(v);
       push(u);
       int du = dir(u, r), dv = dir(v, r);
-      if(~dv && (r == 0 || T[w].fake))
+      if(~dv && (r == 0 || t[w].fake))
         rotate(du == dv ? v : u, r);
       rotate(u, r);
     }
@@ -132,7 +132,7 @@ struct LinkCut : SplayTree {
   vector<int> fakes;
   LinkCut(int n) : SplayTree(2 * n + 1) {
     for(int i = 1; i <= 2 * n; i++) {
-      if(i <= n) T[i].fake = false;
+      if(i <= n) t[i].fake = false;
       else
         fakes.push_back(i);
     }
@@ -140,47 +140,47 @@ struct LinkCut : SplayTree {
   void add(int u, int v) {
     if(!v) return;
     for(int i = 2; i < 4; i++)
-      if(!T[u].child[i]) {
+      if(!t[u].child[i]) {
         attach(u, i, v);
         return;
       }
     int w = fakes.back();
     fakes.pop_back();
-    attach(w, 2, T[u].child[2]);
+    attach(w, 2, t[u].child[2]);
     attach(w, 3, v);
     attach(u, 2, w);
   }
   void recPush(int u) {
-    if(T[u].fake) recPush(T[u].par);
+    if(t[u].fake) recPush(t[u].par);
     push(u);
   }
   void rem(int u) {
-    int v = T[u].par;
+    int v = t[u].par;
     recPush(v);
-    if(T[v].fake) {
-      int w = T[v].par;
-      attach(w, dir(v, 2), T[v].child[dir(u, 2) ^ 1]);
-      if(T[w].fake) splay(w, 2);
+    if(t[v].fake) {
+      int w = t[v].par;
+      attach(w, dir(v, 2), t[v].child[dir(u, 2) ^ 1]);
+      if(t[w].fake) splay(w, 2);
       fakes.push_back(v);
     } else {
       attach(v, dir(u, 2), 0);
     }
-    T[u].par = 0;
+    t[u].par = 0;
   }
   int par(int u) {
-    int v = T[u].par;
-    if(!T[v].fake) return v;
+    int v = t[u].par;
+    if(!t[v].fake) return v;
     splay(v, 2);
-    return T[v].par;
+    return t[v].par;
   }
   int access(int u) {
     int v = u;
-    splay(u, 0), add(u, T[u].child[1]), attach(u, 1, 0);
-    while(T[u].par) {
+    splay(u, 0), add(u, t[u].child[1]), attach(u, 1, 0);
+    while(t[u].par) {
       v = par(u);
       splay(v, 0);
       rem(u);
-      add(v, T[v].child[1]);
+      add(v, t[v].child[1]);
       attach(v, 1, u);
       splay(u, 0);
     }
@@ -198,13 +198,13 @@ struct LinkCut : SplayTree {
   void cut(int u, int v) {
     reroot(u);
     access(v);
-    T[v].child[0] = T[u].par = 0;
+    t[v].child[0] = t[u].par = 0;
     pull(v);
   }
   Data getPath(int u, int v) {
     reroot(u);
     access(v);
-    return T[v].path;
+    return t[v].path;
   }
   void updatePath(int u, int v, Upd upd) {
     reroot(u);
@@ -213,22 +213,22 @@ struct LinkCut : SplayTree {
   }
   Data getSubtree(int v) {
     access(v);
-    Data ret = T[v].data;
+    Data ret = t[v].data;
     for(int i = 2; i < 4; i++)
-      ret += T[T[v].child[i]].all;
+      ret += t[t[v].child[i]].all;
     return ret;
   }
   void updateSubtree(int v, Upd upd) {
     access(v);
-    T[v].data += upd;
+    t[v].data += upd;
     for(int i = 2; i < 4; i++)
-      pushsub(T[v].child[i], true, upd);
+      pushsub(t[v].child[i], true, upd);
   }
   int lca(int u, int v) {
     if(u == v) return u;
     access(u);
     int ret = access(v);
-    return T[u].par ? ret : 0;
+    return t[u].par ? ret : 0;
   }
 };
 // Balanced Binary Search Tree
@@ -236,25 +236,25 @@ struct BBST : public SplayTree {
   int n;
   int root;
   BBST(int n) : SplayTree(n + 5), n(n) {
-    for(auto &x : T)
+    for(auto &x : t)
       x.fake = false;
   }
   void build(vector<int> &arr) {
     for(int i = n, v = n; i; i--, v--) {
-      T[v].data = Data(arr[i]);
+      t[v].data = Data(arr[i]);
       if(i < n - 1) {
-        T[v].child[1] = v + 1, T[v + 1].par = v;
+        t[v].child[1] = v + 1, t[v + 1].par = v;
         pull(v);
       }
     }
-    T[root = n + 2].child[1] = 1, T[1].par = n + 2;
+    t[root = n + 2].child[1] = 1, t[1].par = n + 2;
   }
   int find(int i) {
-    int v = T[root].child[1];
+    int v = t[root].child[1];
     while(true) {
-      int l = T[v].child[0], r = T[v].child[1];
-      if(T[l].path.n >= i) v = l;
-      else if((i -= T[l].path.n) == 1)
+      int l = t[v].child[0], r = t[v].child[1];
+      if(t[l].path.n >= i) v = l;
+      else if((i -= t[l].path.n) == 1)
         break;
       else
         v = r, --i;
@@ -262,24 +262,24 @@ struct BBST : public SplayTree {
     return v;
   }
   void subtreeSplay(int x, int r) {
-    int par = T[r].par, d = dir(r, 0);
-    if(~d) T[r].par = 0;
+    int par = t[r].par, d = dir(r, 0);
+    if(~d) t[r].par = 0;
     splay(x, 0);
     if(~d) attach(par, d, x);
   }
   pair<int, int> compressRange(int l, int r) {
     int vl = find(l - 1), vr = find(r + 1);
-    subtreeSplay(vl, T[root].child[1]);
-    subtreeSplay(vr, T[vl].child[1]);
+    subtreeSplay(vl, t[root].child[1]);
+    subtreeSplay(vr, t[vl].child[1]);
     return {vl, vr};
   }
   Data query(int l, int r) {
     auto [vl, vr] = compressRange(l, r);
-    return T[T[vr].child[0]].path;
+    return t[t[vr].child[0]].path;
   }
   void update(int l, int r, Upd upd) {
     auto [vl, vr] = compressRange(l, r);
-    if(int u = T[vr].child[0]) {
+    if(int u = t[vr].child[0]) {
       pushpath(u, upd);
       pull(vr);
       pull(vl);
@@ -287,6 +287,6 @@ struct BBST : public SplayTree {
   }
   void flip(int l, int r) {
     auto [vl, vr] = compressRange(l, r);
-    if(int u = T[vr].child[0]) pushflip(u);
+    if(int u = t[vr].child[0]) pushflip(u);
   }
 };
