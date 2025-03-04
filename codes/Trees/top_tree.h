@@ -85,8 +85,8 @@ struct SplayTree {
   }
   void pull(int u) {
     if(!T[u].fake)
-      T[u].path = T[T[u].ch[0]].path
-                  + T[T[u].ch[1]].path + T[u].val;
+      T[u].path = T[T[u].ch[0]].path + T[u].val
+                  + T[T[u].ch[1]].path;
     T[u].sub = T[T[u].ch[0]].sub + T[T[u].ch[1]].sub
                + T[T[u].ch[2]].all + T[T[u].ch[3]].all;
     T[u].all = T[u].path + T[u].sub;
