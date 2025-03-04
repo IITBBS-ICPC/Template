@@ -55,11 +55,11 @@ struct SplayTree {
     t[u].all = t[u].path + t[u].sub;
     t[u].plazy += upd;
   }
-  void pushsub(int u, bool r, const Upd &upd) {
+  void pushsub(int u, bool tag, const Upd &upd) {
     if(!u) return;
     t[u].sub += upd;
     t[u].slazy += upd;
-    if(!t[u].fake && r) pushpath(u, upd);
+    if(!t[u].fake && tag) pushpath(u, upd);
     else
       t[u].all = t[u].path + t[u].sub;
   }
@@ -97,33 +97,33 @@ struct SplayTree {
     t[v].par = u;
     pull(u);
   }
-  int dir(int u, int r) {
+  int dir(int u, int tag) {
     int v = t[u].par;
-    return t[v].child[r] == u       ? r
-           : t[v].child[r + 1] == u ? r + 1
+    return t[v].child[tag] == u       ? tag
+           : t[v].child[tag + 1] == u ? tag + 1
                                     : -1;
   }
-  void rotate(int u, int r) {
-    int v = t[u].par, w = t[v].par, du = dir(u, r),
-        dv = dir(v, r);
-    if(dv == -1 && r == 0) dv = dir(v, 2);
+  void rotate(int u, int tag) {
+    int v = t[u].par, w = t[v].par, du = dir(u, tag),
+        dv = dir(v, tag);
+    if(dv == -1 && tag == 0) dv = dir(v, 2);
     attach(v, du, t[u].child[du ^ 1]);
     attach(u, du ^ 1, v);
     if(~dv) attach(w, dv, u);
     else
       t[u].par = w;
   }
-  void splay(int u, int r) {
+  void splay(int u, int tag) {
     push(u);
-    while(~dir(u, r) && (r == 0 || t[t[u].par].fake)) {
+    while(~dir(u, tag) && (tag == 0 || t[t[u].par].fake)) {
       int v = t[u].par, w = t[v].par;
       push(w);
       push(v);
       push(u);
-      int du = dir(u, r), dv = dir(v, r);
-      if(~dv && (r == 0 || t[w].fake))
-        rotate(du == dv ? v : u, r);
-      rotate(u, r);
+      int du = dir(u, tag), dv = dir(v, tag);
+      if(~dv && (tag == 0 || t[w].fake))
+        rotate(du == dv ? v : u, tag);
+      rotate(u, tag);
     }
   }
 };
@@ -252,41 +252,41 @@ struct BBST : public SplayTree {
   int find(int i) {
     int v = t[root].child[1];
     while(true) {
-      int l = t[v].child[0], r = t[v].child[1];
+      int l = t[v].child[0], tag = t[v].child[1];
       if(t[l].path.n >= i) v = l;
       else if((i -= t[l].path.n) == 1)
         break;
       else
-        v = r, --i;
+        v = tag, --i;
     }
     return v;
   }
-  void subtreeSplay(int x, int r) {
-    int par = t[r].par, d = dir(r, 0);
-    if(~d) t[r].par = 0;
+  void subtreeSplay(int x, int tag) {
+    int par = t[tag].par, d = dir(tag, 0);
+    if(~d) t[tag].par = 0;
     splay(x, 0);
     if(~d) attach(par, d, x);
   }
-  pair<int, int> compressRange(int l, int r) {
-    int vl = find(l - 1), vr = find(r + 1);
+  pair<int, int> compressRange(int l, int tag) {
+    int vl = find(l - 1), vr = find(tag + 1);
     subtreeSplay(vl, t[root].child[1]);
     subtreeSplay(vr, t[vl].child[1]);
     return {vl, vr};
   }
-  Data query(int l, int r) {
-    auto [vl, vr] = compressRange(l, r);
+  Data query(int l, int tag) {
+    auto [vl, vr] = compressRange(l, tag);
     return t[t[vr].child[0]].path;
   }
-  void update(int l, int r, Upd upd) {
-    auto [vl, vr] = compressRange(l, r);
+  void update(int l, int tag, Upd upd) {
+    auto [vl, vr] = compressRange(l, tag);
     if(int u = t[vr].child[0]) {
       pushpath(u, upd);
       pull(vr);
       pull(vl);
     }
   }
-  void flip(int l, int r) {
-    auto [vl, vr] = compressRange(l, r);
+  void flip(int l, int tag) {
+    auto [vl, vr] = compressRange(l, tag);
     if(int u = t[vr].child[0]) pushflip(u);
   }
 };
