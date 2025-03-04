@@ -1,200 +1,178 @@
+typedef long long ll;
 const int P1 = 880803841, G1 = 26;//(105*2^23)+1
 const int P2 = 897581057, G2 = 3;//(107*2^23)+1
 const int P3 = 998244353, G3 = 3;//(119*2^23)+1
 const int primitive = 3;
+typedef vector<int> vi;
+#define pb push_back
+#define f(n) for(int i=0;i<(n);i++)
 
-#define u32         __uint32_t 
-#define u64         __uint64_t
-#define vi          vector<int>
-#define v64         vector<u64>
-#define all(x)      x.begin(),x.end()
-template<int mod>
-constexpr int powmod(int a,int p = mod -2){
-    int res = 1;
-    while(p){
-        if(p&1)res = (res*1ll*a)%mod;
-        p>>=1;
-        a = (a*1ll*a)%mod;
-    }
-    return res;
-}
-template<int max_base,int mod,int primitive>
-class Ntt{
- private:
-    constexpr static v64 fill(const int o){
-        vector<u64> res(max_base);
-        const int m = max_base>>1;
-        res[m] = (1ll<<32)%mod;
-        for(int i = m+1;i<max_base;++i)
-            res[i] = reduce(res[i-1]*1ll*o);
-        for(int i = m-1;i;--i) res[i] = res[i<<1];
-        res[0] = (1ll<<32)%mod;
-        return res;
-    }
-    constexpr static v64 init_omegas(){
-        const int omega = 
-            (powmod<mod>(primitive,(mod-1)/
-                max_base)*(1ll<<32))%mod;
-        return fill(omega);
-    }
-    constexpr static v64 init_iomegas(){
-        const int omega = 
-            powmod<mod>(primitive,(mod-1)/max_base);
-        const int iomega = 
-            (powmod<mod>(omega)*(1ll<<32))%mod;
-        return fill(iomega);
-    }
-    static const v64 omegas, iomegas;
-    constexpr static u32 init_mod_inv(){
-        u32 inv = mod;
-        for(int i=0;i<4;++i)inv*=(2-(mod*inv));
-        return -inv;
-    }
-    static const u32 mod_inv = init_mod_inv(), 
-        mod32 = mod;
-    static const u64 mod64 = mod;
- public:
-    // use to combine if using fft explicitly
-    // see mul for details
-    static const inline u32 reduce(u64 x){
-        u32 m = static_cast<u32>(x)*mod_inv;
-        u32 t = (x+m*mod64)>>32;
-        if(t>=mod)t-=mod;
-        return t;
-    }
-    static void fft(vi &a){
-        int n = a.size();
-        for(int m=n>>1;m;m>>=1){
-            auto it_start = omegas.begin()+m;
-            auto it_end = it_start+m;
-            for(auto l = a.begin();l!=a.end();l+=m){
-                for(auto it = it_start;
-                    it!=it_end;++it,++l){
-                    int e = *l-l[m];
-                    if(e<0)e+=mod;
-                    *l+=l[m];
-                    if(*l>=mod)*l-=mod;
-                    l[m] = reduce(e* *it);
-                }
-            }
-        }
-    }
-    static void ifft(vi &a){
-        int n = a.size();
-        for(int m=1;m<n;m<<=1){
-            auto it_start = iomegas.begin()+m;
-            auto it_end = it_start+m;
-            for(auto l = a.begin();l!=a.end();l+=m){
-                for(auto it = it_start;
-                    it!=it_end;++it,++l){
-                    l[m] = reduce(l[m]* *it);
-                    int e = *l-l[m];
-                    if(e<0)e+=mod;
-                    *l+=l[m];
-                    if(*l>=mod)*l-=mod;
-                    l[m] = e;
-                }
-            }
-        }
-        u64 f = (((1ll<<32)*omegas[0])/a.size())%mod;
-        for(int i=0;i<a.size();++i)
-            a[i] = reduce(a[i]*f);
-    }
-    static vi mul(vi a,vi b){
-        int need = a.size()+b.size()-1;
-        int nbase = 1<<(32-__builtin_clz(need-1));
-        a.resize(nbase);b.resize(nbase);
-        fft(a);fft(b);
-        for(int i=0;i<nbase;++i)
-            a[i]=reduce(a[i]*1ll*b[i]);
-        ifft(a);
-        a.resize(need);
-        return a;
-    }
-    static vi inv(vi &a){
-        int n = a.size(), k=1;
-        vi res(1,powmod<mod>(a[0]));
-        while(k<n){
-            int l = k<<1;
-            int need = l<<1;
-            if(l>n)a.resize(l);
-            res.resize(need);
-            vi temp(a.begin(),a.begin()+l);
-            temp.resize(need);fft(res);fft(temp);
-            for(int i=0;i<need;++i)
-                res[i] = reduce(temp[i]*1ll*
-                        reduce(res[i]*1ll*res[i]));
-            ifft(res);
-            for(int i=k;i<l;++i)
-                if(res[i])res[i]=mod-res[i];
-            k = l;
-        }
-        a.resize(n);res.resize(n);
-        return res;
-    }
-};
+const int M = 998244353; // Also works on - 880803841 and 897581057
+int expo(int a,int b,int mod=M){int ans=1; while(b){if(b&1) ans=(ans*1ll*a)%mod; a=(a*1ll*a)%mod; b>>=1;} return ans;}
+int mod_div(int a,int b,int mod=M){return (a*1ll*expo(b,mod-2))%mod;}
 
-template<int max_base,int mod,int primitive> const v64 Ntt<max_base,mod,primitive>::omegas = init_omegas();
-template<int max_base,int mod,int primitive> const v64 Ntt<max_base,mod,primitive>::iomegas = init_iomegas();
+const int root=62; // For 998244353. NOT SURE-> Otherwise while(expo(root,M/2)==1) root++;
+void ntt(vi &a){
+	int n=a.size(),L=31-__builtin_clz(n);
+	static vi rt(2,1);
+	
+	for(static int k=2,s=2;k<n;k*=2,s++) {
+		rt.resize(n);
+		int z[]={1,expo(root,M>>s)};
+		for(int i=k;i<2*k;i++) rt[i]=(ll)rt[i/2]*z[i&1]%M;
+	}
+	vi rev(n);
+	f(n){
+		rev[i]=(rev[i/2]|(i&1)<<L)/2;
+		if(i<rev[i]) swap(a[i],a[rev[i]]);
+	}
+	for(int k=1;k<n;k*=2)
+		for(int i=0;i<n;i+=2*k)
+			for(int j=0;j<k;j++){
+				int z=(ll)rt[j+k]*a[i+j+k]%M,&ai=a[i+j];
+				a[i+j+k]=ai-z+(z>ai?M:0);
+				ai+=(ai+z>=M?z-M:z);
+			}
+}
+bool cap=true; // Set to FALSE to get n+m-1 size product. Set to TRUE for Exp() and below Operations
+#define ao(a) f(a.size()) cout<<((2*a[i]<M)? a[i]:a[i]-M)<<" ";
+vi brutemul(const vi &a,const vi &b){
+	int n=a.size(),m=b.size(),s=n+m-(cap? min(n,m):1);
+	vi out(s,0);
+	f(n) for(int j=0;j<min(m,s-i);j++) out[i+j]=(out[i+j]+(a[i]*1ll*b[j]%M))%M;
+	return out;
+}
+vi mul(const vi &a,const vi &b){
+	if(a.empty() || b.empty()) return {};
+	int p=a.size(),q=b.size();
+	if(min(p,q)<32) return brutemul(a,b);
+	int s=p+q-(cap? min(p,q):1),n=1<<(32-__builtin_clz(s));
+	int inv=mod_div(1,n);
+    vi L(a),R(b),out(n);
+	L.resize(n); R.resize(n);
+	ntt(L); ntt(R);
+	f(n) out[-i&(n-1)]=(ll)L[i]*R[i]%M*inv%M;
+	ntt(out);
+	return {out.begin(),out.begin()+s};
+}
 
-const int mod = 998244353;
-const int base = 1<<20;
-vi& operator *= (vi& a,const vi& b){
-    if(a.empty()||b.empty())a.clear();
-    else a = Ntt<base,mod,primitive>::mul(a,b);
-    return a;
-}
-vi operator * (const vi& a,const vi& b){
-    vi c = a;return c*=b;
-}
-vi& operator /= (vi& a,const vi& b){
-    if(a.size()<b.size())a.clear();
-    else{
-        vi d = b;
-        reverse(d.begin(),d.end());
-        reverse(a.begin(),a.end());
-        int deg = a.size()-b.size();
-        a.resize(deg+1);
-        d.resize(deg+1);
-        d = Ntt<base,mod,primitive>::inv(d);
-        a*=d;a.resize(deg+1);
-        reverse(a.begin(),a.end());
-    }
-    return a;
-}
-vi operator / (vi& a,const vi &b){
-    vi c = a;return c/=b;
-}
-vi& operator += (vi& a,const vi& b){
-    if(a.size()<b.size())a.resize(b.size());
+#define opr operator
+vi& opr*=(vi& a,const vi &b){return a=mul(a,b);}
+vi opr*(const vi& a,const vi &b){return mul(a,b);}
+vi opr*(const int k,const vi &P){vi Q(P); for(int &a:Q) a=(a*1ll*k)%M; return Q;}
+vi& opr*=(vi& P,const int k){for(int &a:P) a=(a*1ll*k)%M; return P;}
+vi& opr+=(vi& a,const vi &b){
+    if(a.size()<b.size()) a.resize(b.size());
     for(int i=0;i<b.size();++i){
         a[i]+=b[i];
-        if(a[i]>=mod)a[i]-=mod;
+        if(a[i]>=M) a[i]-=M;
     }
     return a;
 }
-vi operator + (const vi& a,const vi& b){
-    vi c = a;return c+=b;
-}
-vi& operator -= (vi& a,const vi& b){
-    if(a.size()<b.size())a.resize(b.size());
+vi opr+(const vi& a,const vi &b){vi c(a); return c+=b;}
+vi& opr-=(vi& a,const vi &b){
+    if(a.size()<b.size()) a.resize(b.size());
     for(int i=0;i<b.size();++i){
         a[i]-=b[i];
-        if(a[i]<0)a[i]+=mod;
+        if(a[i]<0) a[i]+=M;
     }
     return a;
 }
-vi operator - (const vi& a,const vi& b){
-    vi c = a;
-    return c-=b;
+vi opr-(const vi& a,const vi &b){vi c(a); return c-=b;}
+vi opr/(const int k,const vi &P){ // P[0] should be non-zero
+	vi Q{mod_div(1,P[0])};
+	int n=P.size();
+	for(int k=2;Q.size()<n;k*=2){
+		Q*=(vi{2}-Q*vi(P.begin(),P.begin()+k));
+		Q.resize(k);	
+	}
+	Q*=k;
+	return Q;
 }
-vi& operator %= (vi& a,const vi& b){
-    if(a.size()<b.size())return a;
-    vi c = (a/b)*b;
-    a -= c;
-    a.resize(b.size()-1);
-    return a;
+vi& opr/=(vi& a,const vi &b){return a*=1/b;}
+vi opr/(const vi& a,const vi &b){vi c(a); return c/=b;}
+int degree(const vi &a) {
+  int n = a.size();
+  while(n && !a[n-1]) n--;
+  return n;
 }
-vi operator % (const vi& a,const vi& b){
-    vi c = a;return c%=b;
+vi& opr%=(vi &a,const vi &b){
+	if(a.empty()) return a;
+	int deg=degree(a)-degree(b)+1;
+	if(deg<=0) return a;
+	vi X(b.rbegin(),b.rend()); X.resize(deg);
+	vi Y(a.rbegin(),a.rend()); Y.resize(deg);	
+	if(deg&(deg-1)) X.resize(1<<(__lg(deg)+1));
+	vi Q=Y/X; Q.resize(deg);
+	reverse(Q.begin(),Q.end());
+	a-=Q*b; a.pop_back();
+	while(a.size() && !a.back()) a.pop_back();
+	return a;
+}
+vi opr%(const vi &a,const vi &b){vi v=a; return v%=b;}
+
+// All P[i] should be in range [0,M)
+// P.size() should be a power of 2.
+void deriv(vi &P){
+    f(P.size()-1) P[i]=(P[i+1]*1ll*(i+1))%M;
+    P.pop_back();
+}
+
+const int N=1e5+1,N1=1<<(__lg(N)+1);
+int inv_mod[N1+1]; // Only required for below Poly functions
+void IM(){f(N1) inv_mod[i+1]=(mod_div(1,i+1));}
+
+void Integrate(vi &P,int C){ // C is integration constant =: P[0]
+	P.pb(0);
+    for(int i=P.size()-1;i>=0;i--) P[i+1]=(P[i]*1ll*inv_mod[i+1])%M;
+    P[0]=C%M;
+}
+void Log(vi &P){ // P[0] should be 1
+	vi invP=1/P;
+    deriv(P);
+    P*=invP;
+    Integrate(P,0);
+    P.resize(invP.size());
+}
+// NOTE:- Set cap=true, for functions below or use Q.resize(k) at the end of loop of Exp().
+void Exp(vi &P){ // P[0] should be 0
+	int n=P.size();
+	vi Q={1};
+	for(int k=2;Q.size()<n;k*=2){
+		vi lnQ(Q);
+		lnQ.resize(k); 
+		Log(lnQ);
+		Q*=(vi(P.begin(),P.begin()+k)+vi{1}-lnQ); 
+	}
+	swap(P,Q);
+}
+void Power(vi &P,int k){
+    int n=P.size(),C=P[0],shift=0;
+    if(!C){
+        while(shift<n && !P[shift]) shift++;
+        if(shift*k>=n){
+        	memset(&P[0],0,n*sizeof(P[0]));
+			return;
+		}
+		P=vi(P.begin()+shift,P.end()-shift*(k-1));
+        C=P[0];
+    }
+    if(C!=1){
+        P*=mod_div(1,C);
+        C=expo(C,k);
+    }
+    Log(P); 
+	P*=k;
+    Exp(P); 
+    if(C!=1) for(int &a:P) a=(a*1ll*C)%M;
+    if(shift){
+    	vi Q(n,0);
+    	f(P.size()) Q[i+shift*k]=P[i];
+    	swap(P,Q);
+    }
+}
+void Root(vi &P,int k){ // P[0] should be 1
+	Log(P);
+	P*=mod_div(1,k);
+	Exp(P);
 }
