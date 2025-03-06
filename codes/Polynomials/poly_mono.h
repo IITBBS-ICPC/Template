@@ -35,7 +35,10 @@ void ntt(vi &a){
 			}
 }
 bool cap=true; // Set to FALSE to get n+m-1 size product. Set to TRUE for Exp() and below Operations
-#define ao(a) f(a.size()) cout<<((2*a[i]<M)? a[i]:a[i]-M)<<" ";
+#define ao(a)                                          \
+  for(int _i = 0; _i < a.size(); _i++)                 \
+    cout << ((2 * a[_i] < M) ? a[_i] : a[_i] - M)      \
+         << " ";
 vi brutemul(const vi &a,const vi &b){
 	int n=a.size(),m=b.size(),s=n+m-(cap? min(n,m):1);
 	vi out(s,0);
