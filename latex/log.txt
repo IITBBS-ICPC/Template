@@ -46,7 +46,7 @@ Document Style - pseudocode environments for use with the `algorithmicx' style
 )
 Underfull \vbox (badness 10000) has occurred while \output is active [1{/usr/lo
 cal/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./temp.toc)
-[2] (../codes/Strings/manacher.h) (../codes/Strings/zalgo.h)
+[2] [3] (../codes/Strings/manacher.h) (../codes/Strings/zalgo.h)
 (../codes/Strings/aho_corasick.h
 (/usr/local/texlive/2024/texmf-dist/tex/latex/base/ts1cmtt.fd))
 (../codes/Strings/suffix_array.h [1{/usr/local/texlive/2024/texmf-dist/fonts/en
@@ -63,54 +63,55 @@ Underfull \vbox (badness 10000) has occurred while \output is active)
 [6]) (../codes/NumberTheory/floor_sum.h) (../codes/NumberTheory/factorizer.h
 [7]
 Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/NumberTheory/gauss.h
+(../codes/NumberTheory/xor_basis.cpp
 Underfull \vbox (badness 3179) has occurred while \output is active [8])
-(../codes/NumberTheory/extended_euclidean.h)
-Underfull \vbox (badness 10000) has occurred while \output is active [9]
-(../codes/STL/bitset.h) (../codes/STL/pragmas.h) (../codes/STL/bitoperation.h)
-(../codes/STL/pbds.h) (../codes/STL/random.h) (../codes/Graphs/max_flow.h
-[10]) (../codes/Graphs/edmond_blossom_unweighted.h
-Underfull \vbox (badness 10000) has occurred while \output is active [11])
-(../codes/Graphs/tarjan_bridges_articulation_points.h)
-(../codes/Graphs/min_cost_max_flow.h [12]
-Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/Graphs/directed_eulerian_cycle.h [13]) (../codes/Graphs/hungarian.h)
-(../codes/Graphs/eulerian_cycle.h)
-Underfull \vbox (badness 1527) has occurred while \output is active [14]
-(../codes/Graphs/edmond_blossom_weighted.h
+(../codes/NumberTheory/gauss.h) (../codes/NumberTheory/extended_euclidean.h
+[9]) (../codes/NumberTheory/gauss_mod_two.h)
 Underfull \vbox (badness 10000) has occurred while \output is active
+(../codes/STL/bitset.h) (../codes/STL/pragmas.h) [10]
+(../codes/STL/bitoperation.h) (../codes/STL/pbds.h) (../codes/STL/random.h)
+(../codes/Graphs/max_flow.h) [11] (../codes/Graphs/edmond_blossom_unweighted.h
+Underfull \vbox (badness 10000) has occurred while \output is active)
+(../codes/Graphs/tarjan_bridges_articulation_points.h [12])
+(../codes/Graphs/min_cost_max_flow.h
+Underfull \vbox (badness 10000) has occurred while \output is active [13])
+(../codes/Graphs/directed_eulerian_cycle.h) (../codes/Graphs/hungarian.h)
+[14] (../codes/Graphs/eulerian_cycle.h)
+Underfull \vbox (badness 1527) has occurred while \output is active
+(../codes/Graphs/edmond_blossom_weighted.h
 Underfull \vbox (badness 10000) has occurred while \output is active [15]
-Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/Geometry/polygon_line_cut.h [16]) (../codes/Geometry/lichao.h)
-(../codes/Geometry/convex_hull.h [17]
-Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/Geometry/3d.h [18]
-Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/Geometry/2d.h [19]
+Underfull \vbox (badness 10000) has occurred while \output is active
+Underfull \vbox (badness 10000) has occurred while \output is active [16])
+(../codes/Geometry/polygon_line_cut.h) (../codes/Geometry/lichao.h [17])
+(../codes/Geometry/convex_hull.h
+Underfull \vbox (badness 10000) has occurred while \output is active [18])
+(../codes/Geometry/3d.h
+Underfull \vbox (badness 10000) has occurred while \output is active [19])
+(../codes/Geometry/2d.h
 Overfull \hbox (7.9557pt too wide) in paragraph at lines 44--45
 [][][][][][][][][][][][][][][][][][][]  
 
-Underfull \vbox (badness 10000) has occurred while \output is active
+Underfull \vbox (badness 10000) has occurred while \output is active [20]
 Overfull \hbox (121.35439pt too wide) in paragraph at lines 67--68
 [][][][][][][][][][][][][][][][]  
 
 Overfull \hbox (69.37999pt too wide) in paragraph at lines 95--96
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
-) (../codes/Polynomials/fft.h [20]) (../codes/Polynomials/multipoint.h)
+) (../codes/Polynomials/fft.h) (../codes/Polynomials/multipoint.h [21])
 (../codes/Polynomials/poly_mono.h
 Overfull \hbox (60.87398pt too wide) in paragraph at lines 32--33
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
-[21]
-Underfull \vbox (badness 10000) has occurred while \output is active
+
 Underfull \vbox (badness 10000) has occurred while \output is active [22]
+Underfull \vbox (badness 10000) has occurred while \output is active
 Overfull \hbox (1.18507pt too wide) in paragraph at lines 160--161
 [][][][][][][][][][][][][][][][][][][][][][][][][]  
 )
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 144.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 148.
 
-[23] [24] (./temp.aux) )
+[23] [24] [25] (./temp.aux) )
 (see the transcript file for additional information)</usr/local/texlive/2024/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2024/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texm
@@ -127,7 +128,7 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (26 pages, 265464 bytes).
+Output written on temp.pdf (28 pages, 268506 bytes).
 Transcript written on temp.log.
 This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex)
  restricted \write18 enabled.
@@ -176,8 +177,8 @@ Document Style - pseudocode environments for use with the `algorithmicx' style
 [Loading MPS to PDF converter (version 2006.09.02).]
 )
 Underfull \vbox (badness 10000) has occurred while \output is active [1{/usr/lo
-cal/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./temp.toc)
-[2] (../codes/Strings/manacher.h) (../codes/Strings/zalgo.h)
+cal/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./temp.toc
+[2]) [3] (../codes/Strings/manacher.h) (../codes/Strings/zalgo.h)
 (../codes/Strings/aho_corasick.h
 (/usr/local/texlive/2024/texmf-dist/tex/latex/base/ts1cmtt.fd))
 (../codes/Strings/suffix_array.h [1{/usr/local/texlive/2024/texmf-dist/fonts/en
@@ -194,54 +195,55 @@ Underfull \vbox (badness 10000) has occurred while \output is active)
 [6]) (../codes/NumberTheory/floor_sum.h) (../codes/NumberTheory/factorizer.h
 [7]
 Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/NumberTheory/gauss.h
+(../codes/NumberTheory/xor_basis.cpp
 Underfull \vbox (badness 3179) has occurred while \output is active [8])
-(../codes/NumberTheory/extended_euclidean.h)
-Underfull \vbox (badness 10000) has occurred while \output is active [9]
-(../codes/STL/bitset.h) (../codes/STL/pragmas.h) (../codes/STL/bitoperation.h)
-(../codes/STL/pbds.h) (../codes/STL/random.h) (../codes/Graphs/max_flow.h
-[10]) (../codes/Graphs/edmond_blossom_unweighted.h
-Underfull \vbox (badness 10000) has occurred while \output is active [11])
-(../codes/Graphs/tarjan_bridges_articulation_points.h)
-(../codes/Graphs/min_cost_max_flow.h [12]
-Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/Graphs/directed_eulerian_cycle.h [13]) (../codes/Graphs/hungarian.h)
-(../codes/Graphs/eulerian_cycle.h)
-Underfull \vbox (badness 1527) has occurred while \output is active [14]
-(../codes/Graphs/edmond_blossom_weighted.h
+(../codes/NumberTheory/gauss.h) (../codes/NumberTheory/extended_euclidean.h
+[9]) (../codes/NumberTheory/gauss_mod_two.h)
 Underfull \vbox (badness 10000) has occurred while \output is active
+(../codes/STL/bitset.h) (../codes/STL/pragmas.h) [10]
+(../codes/STL/bitoperation.h) (../codes/STL/pbds.h) (../codes/STL/random.h)
+(../codes/Graphs/max_flow.h) [11] (../codes/Graphs/edmond_blossom_unweighted.h
+Underfull \vbox (badness 10000) has occurred while \output is active)
+(../codes/Graphs/tarjan_bridges_articulation_points.h [12])
+(../codes/Graphs/min_cost_max_flow.h
+Underfull \vbox (badness 10000) has occurred while \output is active [13])
+(../codes/Graphs/directed_eulerian_cycle.h) (../codes/Graphs/hungarian.h)
+[14] (../codes/Graphs/eulerian_cycle.h)
+Underfull \vbox (badness 1527) has occurred while \output is active
+(../codes/Graphs/edmond_blossom_weighted.h
 Underfull \vbox (badness 10000) has occurred while \output is active [15]
-Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/Geometry/polygon_line_cut.h [16]) (../codes/Geometry/lichao.h)
-(../codes/Geometry/convex_hull.h [17]
-Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/Geometry/3d.h [18]
-Underfull \vbox (badness 10000) has occurred while \output is active)
-(../codes/Geometry/2d.h [19]
+Underfull \vbox (badness 10000) has occurred while \output is active
+Underfull \vbox (badness 10000) has occurred while \output is active [16])
+(../codes/Geometry/polygon_line_cut.h) (../codes/Geometry/lichao.h [17])
+(../codes/Geometry/convex_hull.h
+Underfull \vbox (badness 10000) has occurred while \output is active [18])
+(../codes/Geometry/3d.h
+Underfull \vbox (badness 10000) has occurred while \output is active [19])
+(../codes/Geometry/2d.h
 Overfull \hbox (7.9557pt too wide) in paragraph at lines 44--45
 [][][][][][][][][][][][][][][][][][][]  
 
-Underfull \vbox (badness 10000) has occurred while \output is active
+Underfull \vbox (badness 10000) has occurred while \output is active [20]
 Overfull \hbox (121.35439pt too wide) in paragraph at lines 67--68
 [][][][][][][][][][][][][][][][]  
 
 Overfull \hbox (69.37999pt too wide) in paragraph at lines 95--96
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][]  
-) (../codes/Polynomials/fft.h [20]) (../codes/Polynomials/multipoint.h)
+) (../codes/Polynomials/fft.h) (../codes/Polynomials/multipoint.h [21])
 (../codes/Polynomials/poly_mono.h
 Overfull \hbox (60.87398pt too wide) in paragraph at lines 32--33
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
-[21]
-Underfull \vbox (badness 10000) has occurred while \output is active
+
 Underfull \vbox (badness 10000) has occurred while \output is active [22]
+Underfull \vbox (badness 10000) has occurred while \output is active
 Overfull \hbox (1.18507pt too wide) in paragraph at lines 160--161
 [][][][][][][][][][][][][][][][][][][][][][][][][]  
 )
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 144.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 148.
 
-[23] [24] (./temp.aux) )
+[23] [24] [25] (./temp.aux) )
 (see the transcript file for additional information)</usr/local/texlive/2024/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2024/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texm
@@ -258,5 +260,5 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (26 pages, 265311 bytes).
+Output written on temp.pdf (28 pages, 268589 bytes).
 Transcript written on temp.log.
