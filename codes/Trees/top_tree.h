@@ -252,6 +252,7 @@ struct BBST : public SplayTree {
   int find(int i) {
     int v = t[root].child[1];
     while(true) {
+      push(v);
       int l = t[v].child[0], r = t[v].child[1];
       if(t[l].path.n >= i) v = l;
       else if((i -= t[l].path.n) == 1)

@@ -63,7 +63,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active
 Underfull \vbox (badness 10000) has occurred while \output is active [7])
 (../codes/NumberTheory/gauss.h) (../codes/NumberTheory/extended_euclidean.h
 [8]) (../codes/STL/bitset.h) (../codes/STL/pragmas.h)
-(../codes/STL/bitoperation.h) (../codes/STL/pbds.h) [9] (../codes/STL/random.h)
+(../codes/STL/bitoperation.h) (../codes/STL/pbds.h [9]) (../codes/STL/random.h)
 (../codes/Graphs/max_flow.h) (../codes/Graphs/edmond_blossom_unweighted.h
 [10]
 Underfull \vbox (badness 10000) has occurred while \output is active)
@@ -112,7 +112,7 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (25 pages, 263575 bytes).
+Output written on temp.pdf (25 pages, 263542 bytes).
 Transcript written on temp.log.
 This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex)
  restricted \write18 enabled.
@@ -179,7 +179,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active
 Underfull \vbox (badness 10000) has occurred while \output is active [7])
 (../codes/NumberTheory/gauss.h) (../codes/NumberTheory/extended_euclidean.h
 [8]) (../codes/STL/bitset.h) (../codes/STL/pragmas.h)
-(../codes/STL/bitoperation.h) (../codes/STL/pbds.h) [9] (../codes/STL/random.h)
+(../codes/STL/bitoperation.h) (../codes/STL/pbds.h [9]) (../codes/STL/random.h)
 (../codes/Graphs/max_flow.h) (../codes/Graphs/edmond_blossom_unweighted.h
 [10]
 Underfull \vbox (badness 10000) has occurred while \output is active)
@@ -228,5 +228,5 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (25 pages, 263575 bytes).
+Output written on temp.pdf (25 pages, 263542 bytes).
 Transcript written on temp.log.
