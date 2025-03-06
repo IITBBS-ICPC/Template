@@ -27,12 +27,12 @@ void ntt(vi &a){
 		if(i<rev[i]) swap(a[i],a[rev[i]]);
 	}
 	for(int k=1;k<n;k*=2)
-		for(int i=0;i<n;i+=2*k)
-			for(int j=0;j<k;j++){
-				int z=(ll)rt[j+k]*a[i+j+k]%M,&ai=a[i+j];
-				a[i+j+k]=ai-z+(z>ai?M:0);
-				ai+=(ai+z>=M?z-M:z);
-			}
+	 for(int i=0;i<n;i+=2*k)
+	  for(int j=0;j<k;j++){
+	   int z=(ll)rt[j+k]*a[i+j+k]%M,&ai=a[i+j];
+		a[i+j+k]=ai-z+(z>ai?M:0);
+		 ai+=(ai+z>=M?z-M:z);
+	}
 }
 bool cap=true; // Set to FALSE to get n+m-1 size product. Set to TRUE for Exp() and below Operations
 #define ao(a)                                          \

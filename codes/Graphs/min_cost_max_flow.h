@@ -17,7 +17,7 @@ struct MCMF {
   int N;
   vector<C> pi, dis;
   vi prev;
-  vector<Edge> egde;
+  vector<Edge> edge;
   vector<vi> g;
   void init(int _N) {
     N = _N;
@@ -26,10 +26,10 @@ struct MCMF {
   }
   void addEdge(int u, int v, F cap, C cost) {
     assert(cap >= 0);
-    g[u].pb(egde.size());
-    egde.pb({v, 0, cap, cost});
-    g[v].pb(egde.size());
-    egde.pb({u, 0, 0, -cost});
+    g[u].pb(edge.size());
+    edge.pb({v, 0, cap, cost});
+    g[v].pb(edge.size());
+    edge.pb({u, 0, 0, -cost});
   } // use asserts, don't try smth dumb
   bool path(int s, int t) { // find lowest cost path to
                             // send flow through
@@ -44,7 +44,7 @@ struct MCMF {
       pq.pop();
       if(x.first > dis[x.second]) continue;
       for(int e : g[x.second]) {
-        const Edge &E = egde[e]; // all weights should be
+        const Edge &E = edge[e]; // all weights should be
                                 // non-negative
         if(E.flo < E.cap
            && ckmin(dis[E.to], x.first + E.cost
@@ -59,10 +59,10 @@ struct MCMF {
   void setpi() { // Call this function before calc if
                  // have -ve weights
     for(int i = 0; i < N; i++) {
-      for(int e = 0; e < egde.size(); e++) {
-        const Edge &E = egde[e]; // Bellman-Ford
+      for(int e = 0; e < edge.size(); e++) {
+        const Edge &E = edge[e]; // Bellman-Ford
         if(E.cap)
-          ckmin(pi[E.to], pi[egde[e ^ 1].to] + E.cost);
+          ckmin(pi[E.to], pi[edge[e ^ 1].to] + E.cost);
       }
     }
   }
@@ -77,15 +77,15 @@ struct MCMF {
         pi[i] += dis[i]; // don't matter for
                           // unreachable nodes
       F df = f;
-      for(int x = t; x != s; x = egde[prev[x] ^ 1].to) {
-        const Edge &E = egde[prev[x]];
+      for(int x = t; x != s; x = edge[prev[x] ^ 1].to) {
+        const Edge &E = edge[prev[x]];
         ckmin(df, E.cap - E.flo);
       }
       f -= df;
       totFlow += df;
       totCost += (pi[t] - pi[s]) * df;
-      for(int x = t; x != s; x = egde[prev[x] ^ 1].to)
-        egde[prev[x]].flo += df, egde[prev[x] ^ 1].flo
+      for(int x = t; x != s; x = edge[prev[x] ^ 1].to)
+        edge[prev[x]].flo += df, edge[prev[x] ^ 1].flo
                                -= df;
     } // get max flow you can send along path
     return {totFlow, totCost};

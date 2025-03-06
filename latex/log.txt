@@ -88,21 +88,10 @@ Underfull \vbox (badness 10000) has occurred while \output is active [18])
 (../codes/Geometry/3d.h
 Underfull \vbox (badness 10000) has occurred while \output is active [19])
 (../codes/Geometry/2d.h
-Overfull \hbox (7.9557pt too wide) in paragraph at lines 44--45
-[][][][][][][][][][][][][][][][][][][]  
-
 Underfull \vbox (badness 10000) has occurred while \output is active [20]
-Overfull \hbox (121.35439pt too wide) in paragraph at lines 67--68
-[][][][][][][][][][][][][][][][]  
-
-Overfull \hbox (69.37999pt too wide) in paragraph at lines 95--96
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][]  
-) (../codes/Polynomials/fft.h) (../codes/Polynomials/multipoint.h [21])
+Underfull \vbox (badness 10000) has occurred while \output is active)
+(../codes/Polynomials/fft.h) [21] (../codes/Polynomials/multipoint.h)
 (../codes/Polynomials/poly_mono.h
-Overfull \hbox (60.87398pt too wide) in paragraph at lines 32--33
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
-
 Underfull \vbox (badness 10000) has occurred while \output is active [22]
 Underfull \vbox (badness 10000) has occurred while \output is active
 Overfull \hbox (1.18507pt too wide) in paragraph at lines 160--161
@@ -128,7 +117,7 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (28 pages, 268589 bytes).
+Output written on temp.pdf (28 pages, 268360 bytes).
 Transcript written on temp.log.
 This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex)
  restricted \write18 enabled.
@@ -220,21 +209,10 @@ Underfull \vbox (badness 10000) has occurred while \output is active [18])
 (../codes/Geometry/3d.h
 Underfull \vbox (badness 10000) has occurred while \output is active [19])
 (../codes/Geometry/2d.h
-Overfull \hbox (7.9557pt too wide) in paragraph at lines 44--45
-[][][][][][][][][][][][][][][][][][][]  
-
 Underfull \vbox (badness 10000) has occurred while \output is active [20]
-Overfull \hbox (121.35439pt too wide) in paragraph at lines 67--68
-[][][][][][][][][][][][][][][][]  
-
-Overfull \hbox (69.37999pt too wide) in paragraph at lines 95--96
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][]  
-) (../codes/Polynomials/fft.h) (../codes/Polynomials/multipoint.h [21])
+Underfull \vbox (badness 10000) has occurred while \output is active)
+(../codes/Polynomials/fft.h) [21] (../codes/Polynomials/multipoint.h)
 (../codes/Polynomials/poly_mono.h
-Overfull \hbox (60.87398pt too wide) in paragraph at lines 32--33
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][]  
-
 Underfull \vbox (badness 10000) has occurred while \output is active [22]
 Underfull \vbox (badness 10000) has occurred while \output is active
 Overfull \hbox (1.18507pt too wide) in paragraph at lines 160--161
@@ -260,5 +238,5 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (28 pages, 268589 bytes).
+Output written on temp.pdf (28 pages, 268359 bytes).
 Transcript written on temp.log.
