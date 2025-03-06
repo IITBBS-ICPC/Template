@@ -9,7 +9,7 @@ while(cur < (1 << n)) {
     cout << ((cur >> i) & 1);
   cout << "\n";
   lowest_bit = cur & (-cur);
-  ones = cur & ~(cur + lowest_bit);
+  ones = cur & ~(cur + lowest_bit); // Keep ~ in mind
   if(!r) break;
   else
     cur = cur + lowest_bit + (ones / lowest_bit / 2);

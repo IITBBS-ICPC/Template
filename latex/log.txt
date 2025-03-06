@@ -112,7 +112,7 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (25 pages, 263392 bytes).
+Output written on temp.pdf (25 pages, 263575 bytes).
 Transcript written on temp.log.
 This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex)
  restricted \write18 enabled.
@@ -228,5 +228,5 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (25 pages, 263566 bytes).
+Output written on temp.pdf (25 pages, 263575 bytes).
 Transcript written on temp.log.

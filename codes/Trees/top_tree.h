@@ -252,41 +252,41 @@ struct BBST : public SplayTree {
   int find(int i) {
     int v = t[root].child[1];
     while(true) {
-      int l = t[v].child[0], tag = t[v].child[1];
+      int l = t[v].child[0], r = t[v].child[1];
       if(t[l].path.n >= i) v = l;
       else if((i -= t[l].path.n) == 1)
         break;
       else
-        v = tag, --i;
+        v = r, --i;
     }
     return v;
   }
-  void subtreeSplay(int x, int tag) {
-    int par = t[tag].par, d = dir(tag, 0);
-    if(~d) t[tag].par = 0;
+  void subtreeSplay(int x, int r) {
+    int par = t[r].par, d = dir(r, 0);
+    if(~d) t[r].par = 0;
     splay(x, 0);
     if(~d) attach(par, d, x);
   }
-  pair<int, int> compressRange(int l, int tag) {
-    int vl = find(l - 1), vr = find(tag + 1);
+  pair<int, int> compressRange(int l, int r) {
+    int vl = find(l - 1), vr = find(r + 1);
     subtreeSplay(vl, t[root].child[1]);
     subtreeSplay(vr, t[vl].child[1]);
     return {vl, vr};
   }
-  Data query(int l, int tag) {
-    auto [vl, vr] = compressRange(l, tag);
+  Data query(int l, int r) {
+    auto [vl, vr] = compressRange(l, r);
     return t[t[vr].child[0]].path;
   }
-  void update(int l, int tag, Upd upd) {
-    auto [vl, vr] = compressRange(l, tag);
+  void update(int l, int r, Upd upd) {
+    auto [vl, vr] = compressRange(l, r);
     if(int u = t[vr].child[0]) {
       pushpath(u, upd);
       pull(vr);
       pull(vl);
     }
   }
-  void flip(int l, int tag) {
-    auto [vl, vr] = compressRange(l, tag);
+  void flip(int l, int r) {
+    auto [vl, vr] = compressRange(l, r);
     if(int u = t[vr].child[0]) pushflip(u);
   }
 };
