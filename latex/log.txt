@@ -45,8 +45,8 @@ Document Style - pseudocode environments for use with the `algorithmicx' style
 [Loading MPS to PDF converter (version 2006.09.02).]
 )
 Underfull \vbox (badness 10000) has occurred while \output is active [1{/usr/lo
-cal/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./temp.toc)
-[2] [3] (../codes/Strings/manacher.h) (../codes/Strings/zalgo.h)
+cal/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./temp.toc
+[2]) [3] (../codes/Strings/manacher.h) (../codes/Strings/zalgo.h)
 (../codes/Strings/aho_corasick.h
 (/usr/local/texlive/2024/texmf-dist/tex/latex/base/ts1cmtt.fd))
 (../codes/Strings/suffix_array.h [1{/usr/local/texlive/2024/texmf-dist/fonts/en
@@ -128,7 +128,7 @@ pe1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type
 1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/p
 ublic/cm-super/sftt0900.pfb>
-Output written on temp.pdf (28 pages, 268506 bytes).
+Output written on temp.pdf (28 pages, 268589 bytes).
 Transcript written on temp.log.
 This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex)
  restricted \write18 enabled.
