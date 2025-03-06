@@ -33,8 +33,8 @@ struct node {
   node()
       : par(0), child(), path(), sub(), all(), plazy(),
         slazy(), flip(false), fake(true) {}
-  node(int v, int vp) : node() {
-    data = Data(v, vp);
+  node(int v) : node() {
+    data = Data(v);
     path = all = Data(data);
     fake = false;
   }

@@ -2,7 +2,7 @@ typedef long long ll;
 const int P1 = 880803841, G1 = 26;//(105*2^23)+1
 const int P2 = 897581057, G2 = 3;//(107*2^23)+1
 const int P3 = 998244353, G3 = 3;//(119*2^23)+1
-const int primitive = 3;
+
 typedef vector<int> vi;
 #define pb push_back
 #define f(n) for(int i=0;i<(n);i++)
